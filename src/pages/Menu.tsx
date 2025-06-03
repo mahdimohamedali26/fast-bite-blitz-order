@@ -9,18 +9,18 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Heart, ShoppingCart, Star, Search, Filter, Plus, Minus } from "lucide-react";
+import { Heart, ShoppingCart, Star, Search, Filter, Plus, Minus, Clock, TrendingUp } from "lucide-react";
 
 const Menu = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 50]);
   const [sortBy, setSortBy] = useState("popular");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
   const [itemQuantity, setItemQuantity] = useState(1);
   const [customizations, setCustomizations] = useState({
     size: "medium",
-    addOns: [],
+    addOns: [] as any[],
     spiceLevel: "medium",
     instructions: ""
   });
@@ -160,6 +160,57 @@ const Menu = () => {
     }
   ];
 
+  const specialOffers = [
+    {
+      id: 1,
+      title: "Buy 2 Get 1 FREE",
+      subtitle: "Any Burger",
+      validUntil: "Tomorrow",
+      discount: "33% OFF",
+      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+    },
+    {
+      id: 2,
+      title: "Family Pizza Deal",
+      subtitle: "Large Pizza + 4 Drinks",
+      validUntil: "This Week",
+      discount: "40% OFF",
+      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+    },
+    {
+      id: 3,
+      title: "Student Special",
+      subtitle: "Burger + Fries + Drink",
+      validUntil: "Today Only",
+      discount: "25% OFF",
+      image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+    }
+  ];
+
+  const bestSellers = [
+    {
+      id: 1,
+      name: "FastBite Supreme Burger",
+      price: 12.99,
+      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      orders: 2847
+    },
+    {
+      id: 2,
+      name: "Loaded Cheese Fries",
+      price: 7.99,
+      image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      orders: 3241
+    },
+    {
+      id: 3,
+      name: "Pepperoni Supreme Pizza",
+      price: 16.99,
+      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      orders: 2156
+    }
+  ];
+
   const filteredItems = menuItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === "all" || item.category === activeCategory;
@@ -176,13 +227,13 @@ const Menu = () => {
       case "rating":
         return b.rating - a.rating;
       case "newest":
-        return b.isNew - a.isNew;
+        return Number(b.isNew) - Number(a.isNew);
       default:
         return b.orders - a.orders;
     }
   });
 
-  const openItemModal = (item) => {
+  const openItemModal = (item: any) => {
     setSelectedItem(item);
     setItemQuantity(1);
     setCustomizations({
@@ -191,6 +242,14 @@ const Menu = () => {
       spiceLevel: "medium",
       instructions: ""
     });
+  };
+
+  const calculateTotal = () => {
+    if (!selectedItem) return 0;
+    const selectedSize = selectedItem.sizes.find((s: any) => s.name === customizations.size);
+    const basePrice = selectedSize ? selectedSize.price : selectedItem.price;
+    const addOnsTotal = customizations.addOns.reduce((sum: number, addon: any) => sum + addon.price, 0);
+    return (basePrice + addOnsTotal) * itemQuantity;
   };
 
   return (
@@ -213,6 +272,75 @@ const Menu = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Special Offers Section */}
+        <div className="mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-arial-black text-brand-black mb-4">
+              🔥 Special <span className="text-brand-red">Offers</span>
+            </h2>
+            <p className="text-xl text-gray-600">Limited time deals you can't miss!</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {specialOffers.map((offer) => (
+              <Card key={offer.id} className="bg-gradient-to-br from-brand-red to-brand-orange text-white overflow-hidden transform hover:scale-105 transition-all duration-300">
+                <CardContent className="p-0">
+                  <div className="relative">
+                    <img src={offer.image} alt={offer.title} className="w-full h-32 object-cover opacity-30" />
+                    <div className="absolute inset-0 p-6 flex flex-col justify-center">
+                      <Badge className="bg-brand-yellow text-brand-black font-bold w-fit mb-2">
+                        <Clock className="w-4 h-4 mr-1" />
+                        {offer.validUntil}
+                      </Badge>
+                      <h3 className="text-xl font-montserrat-bold mb-1">{offer.title}</h3>
+                      <p className="text-sm mb-2">{offer.subtitle}</p>
+                      <div className="text-2xl font-arial-black text-brand-yellow">{offer.discount}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Best Sellers Section */}
+        <div className="mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-arial-black text-brand-black mb-4">
+              ⭐ Best <span className="text-brand-red">Sellers</span>
+            </h2>
+            <p className="text-xl text-gray-600">Our customers' absolute favorites!</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {bestSellers.map((item, index) => (
+              <Card key={item.id} className="bg-white shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
+                <CardContent className="p-0">
+                  <div className="relative">
+                    <img src={item.image} alt={item.name} className="w-full h-40 object-cover" />
+                    <Badge className="absolute top-3 left-3 bg-brand-yellow text-brand-black font-bold">
+                      #{index + 1} Best Seller
+                    </Badge>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-montserrat-bold text-brand-black mb-2">{item.name}</h3>
+                    <div className="flex items-center text-sm text-gray-600 mb-3">
+                      <TrendingUp className="w-4 h-4 mr-1 text-brand-red" />
+                      {item.orders.toLocaleString()} orders
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xl font-arial-black text-brand-red">${item.price}</span>
+                      <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange">
+                        Quick Order
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
         {/* Search and Filters */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -390,7 +518,7 @@ const Menu = () => {
                                     <div>
                                       <h4 className="font-bold text-brand-black mb-2">Ingredients:</h4>
                                       <ul className="text-sm text-gray-600 space-y-1">
-                                        {selectedItem.ingredients.map((ingredient, index) => (
+                                        {selectedItem.ingredients.map((ingredient: string, index: number) => (
                                           <li key={index}>• {ingredient}</li>
                                         ))}
                                       </ul>
@@ -411,7 +539,7 @@ const Menu = () => {
                                     <div className="mt-4">
                                       <h4 className="font-bold text-brand-black mb-2">Contains:</h4>
                                       <div className="flex space-x-2">
-                                        {selectedItem.allergens.map((allergen, index) => (
+                                        {selectedItem.allergens.map((allergen: string, index: number) => (
                                           <Badge key={index} variant="outline" className="text-xs">
                                             {allergen}
                                           </Badge>
@@ -429,7 +557,7 @@ const Menu = () => {
                                   <div className="mb-4">
                                     <label className="block font-medium text-gray-700 mb-2">Size:</label>
                                     <div className="grid grid-cols-2 gap-2">
-                                      {selectedItem.sizes.map((size, index) => (
+                                      {selectedItem.sizes.map((size: any, index: number) => (
                                         <Button
                                           key={index}
                                           variant={customizations.size === size.name ? "default" : "outline"}
@@ -440,7 +568,7 @@ const Menu = () => {
                                           }`}
                                           onClick={() => setCustomizations({...customizations, size: size.name})}
                                         >
-                                          {size.name} (+${(size.price - selectedItem.price).toFixed(2)})
+                                          {size.name} (${size.price.toFixed(2)})
                                         </Button>
                                       ))}
                                     </div>
@@ -450,7 +578,7 @@ const Menu = () => {
                                   <div className="mb-4">
                                     <label className="block font-medium text-gray-700 mb-2">Add-ons:</label>
                                     <div className="space-y-2">
-                                      {selectedItem.addOns.map((addon, index) => (
+                                      {selectedItem.addOns.map((addon: any, index: number) => (
                                         <label key={index} className="flex items-center space-x-2">
                                           <input 
                                             type="checkbox" 
@@ -470,7 +598,7 @@ const Menu = () => {
                                             }}
                                           />
                                           <span className="text-sm">
-                                            {addon.name} (+${addon.price})
+                                            {addon.name} (+${addon.price.toFixed(2)})
                                           </span>
                                         </label>
                                       ))}
@@ -512,7 +640,7 @@ const Menu = () => {
                                     <div className="text-right">
                                       <div className="text-sm text-gray-600">Total:</div>
                                       <div className="text-2xl font-arial-black text-brand-red">
-                                        ${((selectedItem.sizes.find(s => s.name === customizations.size)?.price || selectedItem.price) + customizations.addOns.reduce((sum, addon) => sum + addon.price, 0)) * itemQuantity}
+                                        ${calculateTotal().toFixed(2)}
                                       </div>
                                     </div>
                                   </div>

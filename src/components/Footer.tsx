@@ -51,7 +51,7 @@ const Footer = () => {
               placeholder="Enter your email for delicious deals..."
               className="bg-white text-brand-black border-0"
             />
-            <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold px-8">
+            <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold px-8 whitespace-nowrap">
               Get Deals! 🎯
             </Button>
           </div>
@@ -64,7 +64,7 @@ const Footer = () => {
       {/* Main Footer Content */}
       <div className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             
             {/* Company Info */}
             <div className="space-y-6">
@@ -86,15 +86,15 @@ const Footer = () => {
 
               {/* Social Media */}
               <div>
-                <h4 className="font-montserrat-bold text-lg mb-4">Follow Our Delicious Journey</h4>
-                <div className="flex space-x-4">
-                  <Button variant="outline" size="sm" className="text-brand-yellow border-brand-yellow hover:bg-brand-yellow hover:text-brand-black">
+                <h4 className="font-montserrat-bold text-lg mb-4">Follow Our Journey</h4>
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="outline" size="sm" className="text-brand-yellow border-brand-yellow hover:bg-brand-yellow hover:text-brand-black text-xs">
                     📘 Facebook
                   </Button>
-                  <Button variant="outline" size="sm" className="text-brand-yellow border-brand-yellow hover:bg-brand-yellow hover:text-brand-black">
+                  <Button variant="outline" size="sm" className="text-brand-yellow border-brand-yellow hover:bg-brand-yellow hover:text-brand-black text-xs">
                     📷 Instagram
                   </Button>
-                  <Button variant="outline" size="sm" className="text-brand-yellow border-brand-yellow hover:bg-brand-yellow hover:text-brand-black">
+                  <Button variant="outline" size="sm" className="text-brand-yellow border-brand-yellow hover:bg-brand-yellow hover:text-brand-black text-xs">
                     🐦 Twitter
                   </Button>
                 </div>
@@ -104,10 +104,10 @@ const Footer = () => {
               <div>
                 <h4 className="font-montserrat-bold text-lg mb-4">Download Our App</h4>
                 <div className="space-y-2">
-                  <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange w-full">
+                  <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange w-full text-sm">
                     📱 Download for iOS
                   </Button>
-                  <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange w-full">
+                  <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange w-full text-sm">
                     🤖 Download for Android
                   </Button>
                 </div>
@@ -132,7 +132,7 @@ const Footer = () => {
               {/* Customer Service */}
               <div className="mt-8">
                 <h5 className="font-montserrat-bold text-brand-yellow mb-4">Need Help?</h5>
-                <div className="space-y-2 text-gray-300">
+                <div className="space-y-2 text-gray-300 text-sm">
                   <p>📞 Customer Service: 24/7</p>
                   <p>📧 Email Support: Fast Response</p>
                   <p>💬 Live Chat: Available</p>
@@ -145,11 +145,11 @@ const Footer = () => {
               <h4 className="font-montserrat-bold text-lg mb-6 text-brand-yellow">Operating Hours</h4>
               <div className="space-y-3">
                 {operatingHours.map((schedule, index) => (
-                  <div key={index} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-300">{schedule.day}</span>
-                    <span className={`font-bold ${schedule.day === "Delivery" ? "text-brand-yellow" : "text-white"}`}>
+                  <div key={index} className="text-sm">
+                    <div className="text-gray-300 mb-1">{schedule.day}</div>
+                    <div className={`font-bold ${schedule.day === "Delivery" ? "text-brand-yellow" : "text-white"}`}>
                       {schedule.hours}
-                    </span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -174,7 +174,7 @@ const Footer = () => {
                   <div className="space-y-2 text-sm">
                     <div className="flex items-start space-x-2">
                       <MapPin className="w-4 h-4 text-brand-yellow flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-300">{branch.address}</span>
+                      <span className="text-gray-300 leading-tight">{branch.address}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Phone className="w-4 h-4 text-brand-yellow" />
@@ -204,10 +204,10 @@ const Footer = () => {
       {/* Bottom Footer */}
       <div className="border-t border-gray-800 py-8">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             
             {/* Copyright */}
-            <div className="text-center md:text-left">
+            <div className="text-center lg:text-left">
               <p className="text-gray-400">
                 © 2024 FastBite Restaurant. All rights reserved.
               </p>
@@ -230,7 +230,7 @@ const Footer = () => {
             </div>
 
             {/* Legal Links */}
-            <div className="flex space-x-4 text-sm">
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
               <a href="#" className="text-gray-400 hover:text-brand-yellow transition-colors">
                 Privacy Policy
               </a>
