@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,6 +20,25 @@ export default {
 		},
 		extend: {
 			colors: {
+				// Fast food brand colors
+				'brand-red': {
+					DEFAULT: '#FF0000',
+					dark: '#DC143C',
+					accent: '#E31B23'
+				},
+				'brand-yellow': {
+					DEFAULT: '#FFD700',
+					orange: '#FFA500',
+					light: '#FFBF00'
+				},
+				'brand-orange': {
+					DEFAULT: '#FF4500',
+					accent: '#FF6B35'
+				},
+				'brand-black': {
+					DEFAULT: '#000000',
+					light: '#1A1A1A'
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -51,17 +71,12 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
-				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
 				}
+			},
+			fontFamily: {
+				'arial-black': ['Arial Black', 'Arial', 'sans-serif'],
+				'roboto-bold': ['Roboto', 'sans-serif'],
+				'montserrat-bold': ['Montserrat', 'sans-serif'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +99,29 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-scale': {
+					'0%, 100%': {
+						transform: 'scale(1)'
+					},
+					'50%': {
+						transform: 'scale(1.05)'
+					}
+				},
+				'slide-in-right': {
+					'0%': {
+						transform: 'translateX(100%)'
+					},
+					'100%': {
+						transform: 'translateX(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-scale': 'pulse-scale 2s ease-in-out infinite',
+				'slide-in-right': 'slide-in-right 0.3s ease-out'
 			}
 		}
 	},
