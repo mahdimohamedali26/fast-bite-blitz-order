@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -9,12 +8,12 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Heart, ShoppingCart, Star, Search, Filter, Plus, Minus, Clock, TrendingUp } from "lucide-react";
+import { Heart, ShoppingCart, Star, Search, Plus, Minus, Clock, TrendingUp } from "lucide-react";
 
 const Menu = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 50]);
+  const [priceRange, setPriceRange] = useState([25]);
   const [sortBy, setSortBy] = useState("popular");
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [itemQuantity, setItemQuantity] = useState(1);
@@ -214,7 +213,7 @@ const Menu = () => {
   const filteredItems = menuItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === "all" || item.category === activeCategory;
-    const matchesPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
+    const matchesPrice = item.price <= priceRange[0];
     return matchesSearch && matchesCategory && matchesPrice;
   });
 
@@ -257,44 +256,397 @@ const Menu = () => {
       <Header />
       
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-16">
+      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-12 md:py-16">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl font-arial-black mb-4">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-arial-black mb-4">
             Our Complete <span className="text-brand-yellow">Menu</span>
           </h1>
-          <p className="text-xl mb-8">
+          <p className="text-lg md:text-xl mb-6 md:mb-8">
             Discover our full range of mouth-watering fast food favorites
           </p>
-          <Badge className="bg-brand-yellow text-brand-black font-bold text-lg px-6 py-2">
+          <Badge className="bg-brand-yellow text-brand-black font-bold text-sm md:text-lg px-4 md:px-6 py-2">
             🔥 45+ Delicious Items Available
           </Badge>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 md:py-8">
+        {/* Menu Items Section - Moved before offers */}
+        <div className="mb-12">
+          {/* Search and Filters */}
+          <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Input
+                  placeholder="Search delicious food..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 border-2 border-brand-yellow focus:border-brand-red"
+                />
+              </div>
+
+              {/* Price Range - Single handle */}
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  Max Price: ${priceRange[0]}
+                </label>
+                <Slider
+                  value={priceRange}
+                  onValueChange={setPriceRange}
+                  max={50}
+                  min={5}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+
+              {/* Sort */}
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Sort By</label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="popular">Most Popular</SelectItem>
+                    <SelectItem value="price-low">Price: Low to High</SelectItem>
+                    <SelectItem value="price-high">Price: High to Low</SelectItem>
+                    <SelectItem value="rating">Highest Rated</SelectItem>
+                    <SelectItem value="newest">Newest Items</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Results Count */}
+              <div className="flex items-end">
+                <div className="text-sm text-gray-600">
+                  Showing <span className="font-bold text-brand-red">{sortedItems.length}</span> delicious items
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-8">
+            {/* Categories Sidebar */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 sticky top-24">
+                <h3 className="text-lg md:text-xl font-montserrat-bold text-brand-black mb-4 md:mb-6">Categories</h3>
+                <div className="space-y-2">
+                  {categories.map((category) => (
+                    <Button
+                      key={category.id}
+                      variant={activeCategory === category.id ? "default" : "outline"}
+                      className={`w-full justify-between font-medium text-sm md:text-base ${
+                        activeCategory === category.id
+                          ? "bg-brand-red text-white"
+                          : "text-brand-black border-gray-200 hover:border-brand-red hover:text-brand-red"
+                      }`}
+                      onClick={() => setActiveCategory(category.id)}
+                    >
+                      <span>{category.name}</span>
+                      <Badge variant="secondary" className="text-xs">
+                        {category.count}
+                      </Badge>
+                    </Button>
+                  ))}
+                </div>
+
+                {/* Recommended Section */}
+                <div className="mt-6 md:mt-8 p-4 bg-gradient-to-br from-brand-yellow/10 to-brand-orange/10 rounded-lg">
+                  <h4 className="font-montserrat-bold text-brand-black mb-2 text-sm md:text-base">🌟 Recommended for You</h4>
+                  <p className="text-xs md:text-sm text-gray-600 mb-3">
+                    Based on popular choices and ratings
+                  </p>
+                  <Button size="sm" className="bg-brand-red text-white hover:bg-brand-red/90 w-full text-xs md:text-sm">
+                    View Recommendations
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Menu Items Grid */}
+            <div className="lg:col-span-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+                {sortedItems.map((item) => (
+                  <Card key={item.id} className="bg-white shadow-lg border-0 overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
+                    <div className="relative">
+                      <img 
+                        src={item.image} 
+                        alt={item.name}
+                        className="w-full h-40 md:h-48 object-cover"
+                      />
+                      <div className="absolute top-3 left-3 space-y-2">
+                        {item.isBestSeller && (
+                          <Badge className="bg-brand-red text-white font-bold text-xs">
+                            🔥 Best Seller
+                          </Badge>
+                        )}
+                        {item.isNew && (
+                          <Badge className="bg-brand-yellow text-brand-black font-bold text-xs">
+                            ✨ New!
+                          </Badge>
+                        )}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="absolute top-3 right-3 bg-white/90 text-brand-red border-brand-red hover:bg-brand-red hover:text-white p-2"
+                      >
+                        <Heart className="w-3 h-3 md:w-4 md:h-4" />
+                      </Button>
+                    </div>
+                    
+                    <CardContent className="p-4 md:p-6">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-base md:text-lg font-montserrat-bold text-brand-black">{item.name}</h3>
+                        <div className="flex items-center">
+                          <Star className="w-3 h-3 md:w-4 md:h-4 text-brand-yellow fill-current" />
+                          <span className="text-xs md:text-sm font-bold ml-1">{item.rating}</span>
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-600 text-xs md:text-sm mb-3 md:mb-4 line-clamp-2">{item.description}</p>
+                      
+                      <div className="text-xs text-gray-500 mb-3 md:mb-4">
+                        {item.orders.toLocaleString()} orders this month
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-lg md:text-2xl font-arial-black text-brand-red">${item.price}</span>
+                        <div className="space-x-2">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button 
+                                size="sm"
+                                variant="outline"
+                                className="text-brand-black border-brand-black hover:bg-brand-black hover:text-white text-xs hidden md:inline-flex"
+                                onClick={() => openItemModal(item)}
+                              >
+                                Details
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle className="text-2xl font-montserrat-bold text-brand-black">
+                                  {selectedItem?.name}
+                                </DialogTitle>
+                              </DialogHeader>
+                              {selectedItem && (
+                                <div className="space-y-6">
+                                  {/* Item Image */}
+                                  <img 
+                                    src={selectedItem.image} 
+                                    alt={selectedItem.name}
+                                    className="w-full h-64 object-cover rounded-lg"
+                                  />
+                                  
+                                  {/* Description & Details */}
+                                  <div>
+                                    <p className="text-gray-600 mb-4">{selectedItem.description}</p>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                      <div>
+                                        <h4 className="font-bold text-brand-black mb-2">Ingredients:</h4>
+                                        <ul className="text-sm text-gray-600 space-y-1">
+                                          {selectedItem.ingredients.map((ingredient: string, index: number) => (
+                                            <li key={index}>• {ingredient}</li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                      
+                                      <div>
+                                        <h4 className="font-bold text-brand-black mb-2">Nutrition (per serving):</h4>
+                                        <div className="text-sm text-gray-600 space-y-1">
+                                          <p>Calories: {selectedItem.nutrition.calories}</p>
+                                          <p>Protein: {selectedItem.nutrition.protein}g</p>
+                                          <p>Carbs: {selectedItem.nutrition.carbs}g</p>
+                                          <p>Fat: {selectedItem.nutrition.fat}g</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    {selectedItem.allergens.length > 0 && (
+                                      <div className="mt-4">
+                                        <h4 className="font-bold text-brand-black mb-2">Contains:</h4>
+                                        <div className="flex space-x-2">
+                                          {selectedItem.allergens.map((allergen: string, index: number) => (
+                                            <Badge key={index} variant="outline" className="text-xs">
+                                              {allergen}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                  
+                                  {/* Customization Options */}
+                                  <div className="border-t pt-6">
+                                    <h4 className="font-bold text-brand-black mb-4">Customize Your Order</h4>
+                                    
+                                    {/* Size Selection */}
+                                    <div className="mb-4">
+                                      <label className="block font-medium text-gray-700 mb-2">Size:</label>
+                                      <div className="grid grid-cols-2 gap-2">
+                                        {selectedItem.sizes.map((size: any, index: number) => (
+                                          <Button
+                                            key={index}
+                                            variant={customizations.size === size.name ? "default" : "outline"}
+                                            className={`${
+                                              customizations.size === size.name 
+                                                ? "bg-brand-red text-white" 
+                                                : "text-brand-black border-gray-300"
+                                            }`}
+                                            onClick={() => setCustomizations({...customizations, size: size.name})}
+                                          >
+                                            {size.name} (${size.price.toFixed(2)})
+                                          </Button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    
+                                    {/* Add-ons */}
+                                    <div className="mb-4">
+                                      <label className="block font-medium text-gray-700 mb-2">Add-ons:</label>
+                                      <div className="space-y-2">
+                                        {selectedItem.addOns.map((addon: any, index: number) => (
+                                          <label key={index} className="flex items-center space-x-2">
+                                            <input 
+                                              type="checkbox" 
+                                              className="rounded border-gray-300"
+                                              onChange={(e) => {
+                                                if (e.target.checked) {
+                                                  setCustomizations({
+                                                    ...customizations,
+                                                    addOns: [...customizations.addOns, addon]
+                                                  });
+                                                } else {
+                                                  setCustomizations({
+                                                    ...customizations,
+                                                    addOns: customizations.addOns.filter(a => a.name !== addon.name)
+                                                  });
+                                                }
+                                              }}
+                                            />
+                                            <span className="text-sm">
+                                              {addon.name} (+${addon.price.toFixed(2)})
+                                            </span>
+                                          </label>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    
+                                    {/* Special Instructions */}
+                                    <div className="mb-6">
+                                      <label className="block font-medium text-gray-700 mb-2">Special Instructions:</label>
+                                      <textarea 
+                                        className="w-full p-3 border border-gray-300 rounded-lg resize-none"
+                                        rows={3}
+                                        placeholder="Any special requests or dietary requirements..."
+                                        value={customizations.instructions}
+                                        onChange={(e) => setCustomizations({...customizations, instructions: e.target.value})}
+                                      />
+                                    </div>
+                                    
+                                    {/* Quantity and Add to Cart */}
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center space-x-3">
+                                        <Button 
+                                          variant="outline" 
+                                          size="sm"
+                                          onClick={() => setItemQuantity(Math.max(1, itemQuantity - 1))}
+                                        >
+                                          <Minus className="w-4 h-4" />
+                                        </Button>
+                                        <span className="font-bold text-xl">{itemQuantity}</span>
+                                        <Button 
+                                          variant="outline" 
+                                          size="sm"
+                                          onClick={() => setItemQuantity(itemQuantity + 1)}
+                                        >
+                                          <Plus className="w-4 h-4" />
+                                        </Button>
+                                      </div>
+                                      
+                                      <div className="text-right">
+                                        <div className="text-sm text-gray-600">Total:</div>
+                                        <div className="text-2xl font-arial-black text-brand-red">
+                                          ${calculateTotal().toFixed(2)}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <Button className="w-full bg-brand-red hover:bg-brand-red/90 text-white font-bold text-lg py-3 mt-4">
+                                      <ShoppingCart className="w-5 h-5 mr-2" />
+                                      Add to Cart
+                                    </Button>
+                                  </div>
+                                </div>
+                              )}
+                            </DialogContent>
+                          </Dialog>
+                          
+                          <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange text-xs md:text-sm px-2 md:px-4">
+                            <ShoppingCart className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                            Add
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* No Results */}
+              {sortedItems.length === 0 && (
+                <div className="text-center py-12">
+                  <div className="text-4xl md:text-6xl mb-4">🍽️</div>
+                  <h3 className="text-xl md:text-2xl font-montserrat-bold text-brand-black mb-2">
+                    No items found
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Try adjusting your search or filters to find more delicious options
+                  </p>
+                  <Button 
+                    onClick={() => {
+                      setSearchTerm("");
+                      setActiveCategory("all");
+                      setPriceRange([50]);
+                    }}
+                    className="bg-brand-red text-white hover:bg-brand-red/90"
+                  >
+                    Clear All Filters
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Special Offers Section */}
         <div className="mb-12">
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-arial-black text-brand-black mb-4">
+            <h2 className="text-3xl md:text-4xl font-arial-black text-brand-black mb-4">
               🔥 Special <span className="text-brand-red">Offers</span>
             </h2>
-            <p className="text-xl text-gray-600">Limited time deals you can't miss!</p>
+            <p className="text-lg md:text-xl text-gray-600">Limited time deals you can't miss!</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
             {specialOffers.map((offer) => (
               <Card key={offer.id} className="bg-gradient-to-br from-brand-red to-brand-orange text-white overflow-hidden transform hover:scale-105 transition-all duration-300">
                 <CardContent className="p-0">
                   <div className="relative">
-                    <img src={offer.image} alt={offer.title} className="w-full h-32 object-cover opacity-30" />
-                    <div className="absolute inset-0 p-6 flex flex-col justify-center">
-                      <Badge className="bg-brand-yellow text-brand-black font-bold w-fit mb-2">
-                        <Clock className="w-4 h-4 mr-1" />
+                    <img src={offer.image} alt={offer.title} className="w-full h-24 md:h-32 object-cover opacity-30" />
+                    <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-center">
+                      <Badge className="bg-brand-yellow text-brand-black font-bold w-fit mb-2 text-xs">
+                        <Clock className="w-3 h-3 md:w-4 md:h-4 mr-1" />
                         {offer.validUntil}
                       </Badge>
-                      <h3 className="text-xl font-montserrat-bold mb-1">{offer.title}</h3>
-                      <p className="text-sm mb-2">{offer.subtitle}</p>
-                      <div className="text-2xl font-arial-black text-brand-yellow">{offer.discount}</div>
+                      <h3 className="text-lg md:text-xl font-montserrat-bold mb-1">{offer.title}</h3>
+                      <p className="text-xs md:text-sm mb-2">{offer.subtitle}</p>
+                      <div className="text-xl md:text-2xl font-arial-black text-brand-yellow">{offer.discount}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -306,31 +658,31 @@ const Menu = () => {
         {/* Best Sellers Section */}
         <div className="mb-12">
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-arial-black text-brand-black mb-4">
+            <h2 className="text-3xl md:text-4xl font-arial-black text-brand-black mb-4">
               ⭐ Best <span className="text-brand-red">Sellers</span>
             </h2>
-            <p className="text-xl text-gray-600">Our customers' absolute favorites!</p>
+            <p className="text-lg md:text-xl text-gray-600">Our customers' absolute favorites!</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
             {bestSellers.map((item, index) => (
               <Card key={item.id} className="bg-white shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                 <CardContent className="p-0">
                   <div className="relative">
-                    <img src={item.image} alt={item.name} className="w-full h-40 object-cover" />
-                    <Badge className="absolute top-3 left-3 bg-brand-yellow text-brand-black font-bold">
+                    <img src={item.image} alt={item.name} className="w-full h-32 md:h-40 object-cover" />
+                    <Badge className="absolute top-3 left-3 bg-brand-yellow text-brand-black font-bold text-xs">
                       #{index + 1} Best Seller
                     </Badge>
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-montserrat-bold text-brand-black mb-2">{item.name}</h3>
-                    <div className="flex items-center text-sm text-gray-600 mb-3">
-                      <TrendingUp className="w-4 h-4 mr-1 text-brand-red" />
+                  <div className="p-3 md:p-4">
+                    <h3 className="font-montserrat-bold text-brand-black mb-2 text-sm md:text-base">{item.name}</h3>
+                    <div className="flex items-center text-xs md:text-sm text-gray-600 mb-3">
+                      <TrendingUp className="w-3 h-3 md:w-4 md:h-4 mr-1 text-brand-red" />
                       {item.orders.toLocaleString()} orders
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xl font-arial-black text-brand-red">${item.price}</span>
-                      <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange">
+                      <span className="text-lg md:text-xl font-arial-black text-brand-red">${item.price}</span>
+                      <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange text-xs md:text-sm px-3 md:px-4">
                         Quick Order
                       </Button>
                     </div>
@@ -341,365 +693,15 @@ const Menu = () => {
           </div>
         </div>
 
-        {/* Search and Filters */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input
-                placeholder="Search delicious food..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-2 border-brand-yellow focus:border-brand-red"
-              />
-            </div>
-
-            {/* Price Range */}
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
-                Price Range: ${priceRange[0]} - ${priceRange[1]}
-              </label>
-              <Slider
-                value={priceRange}
-                onValueChange={setPriceRange}
-                max={50}
-                min={0}
-                step={1}
-                className="w-full"
-              />
-            </div>
-
-            {/* Sort */}
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Sort By</label>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="popular">Most Popular</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="rating">Highest Rated</SelectItem>
-                  <SelectItem value="newest">Newest Items</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Results Count */}
-            <div className="flex items-end">
-              <div className="text-sm text-gray-600">
-                Showing <span className="font-bold text-brand-red">{sortedItems.length}</span> delicious items
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Categories Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
-              <h3 className="text-xl font-montserrat-bold text-brand-black mb-6">Categories</h3>
-              <div className="space-y-2">
-                {categories.map((category) => (
-                  <Button
-                    key={category.id}
-                    variant={activeCategory === category.id ? "default" : "outline"}
-                    className={`w-full justify-between font-medium ${
-                      activeCategory === category.id
-                        ? "bg-brand-red text-white"
-                        : "text-brand-black border-gray-200 hover:border-brand-red hover:text-brand-red"
-                    }`}
-                    onClick={() => setActiveCategory(category.id)}
-                  >
-                    <span>{category.name}</span>
-                    <Badge variant="secondary" className="text-xs">
-                      {category.count}
-                    </Badge>
-                  </Button>
-                ))}
-              </div>
-
-              {/* Recommended Section */}
-              <div className="mt-8 p-4 bg-gradient-to-br from-brand-yellow/10 to-brand-orange/10 rounded-lg">
-                <h4 className="font-montserrat-bold text-brand-black mb-2">🌟 Recommended for You</h4>
-                <p className="text-sm text-gray-600 mb-3">
-                  Based on popular choices and ratings
-                </p>
-                <Button size="sm" className="bg-brand-red text-white hover:bg-brand-red/90 w-full">
-                  View Recommendations
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Menu Items Grid */}
-          <div className="lg:col-span-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {sortedItems.map((item) => (
-                <Card key={item.id} className="bg-white shadow-lg border-0 overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
-                  <div className="relative">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="absolute top-3 left-3 space-y-2">
-                      {item.isBestSeller && (
-                        <Badge className="bg-brand-red text-white font-bold">
-                          🔥 Best Seller
-                        </Badge>
-                      )}
-                      {item.isNew && (
-                        <Badge className="bg-brand-yellow text-brand-black font-bold">
-                          ✨ New!
-                        </Badge>
-                      )}
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="absolute top-3 right-3 bg-white/90 text-brand-red border-brand-red hover:bg-brand-red hover:text-white"
-                    >
-                      <Heart className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-lg font-montserrat-bold text-brand-black">{item.name}</h3>
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-brand-yellow fill-current" />
-                        <span className="text-sm font-bold ml-1">{item.rating}</span>
-                      </div>
-                    </div>
-                    
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{item.description}</p>
-                    
-                    <div className="text-xs text-gray-500 mb-4">
-                      {item.orders.toLocaleString()} orders this month
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-arial-black text-brand-red">${item.price}</span>
-                      <div className="space-x-2">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button 
-                              size="sm"
-                              variant="outline"
-                              className="text-brand-black border-brand-black hover:bg-brand-black hover:text-white"
-                              onClick={() => openItemModal(item)}
-                            >
-                              View Details
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                            <DialogHeader>
-                              <DialogTitle className="text-2xl font-montserrat-bold text-brand-black">
-                                {selectedItem?.name}
-                              </DialogTitle>
-                            </DialogHeader>
-                            {selectedItem && (
-                              <div className="space-y-6">
-                                {/* Item Image */}
-                                <img 
-                                  src={selectedItem.image} 
-                                  alt={selectedItem.name}
-                                  className="w-full h-64 object-cover rounded-lg"
-                                />
-                                
-                                {/* Description & Details */}
-                                <div>
-                                  <p className="text-gray-600 mb-4">{selectedItem.description}</p>
-                                  
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                      <h4 className="font-bold text-brand-black mb-2">Ingredients:</h4>
-                                      <ul className="text-sm text-gray-600 space-y-1">
-                                        {selectedItem.ingredients.map((ingredient: string, index: number) => (
-                                          <li key={index}>• {ingredient}</li>
-                                        ))}
-                                      </ul>
-                                    </div>
-                                    
-                                    <div>
-                                      <h4 className="font-bold text-brand-black mb-2">Nutrition (per serving):</h4>
-                                      <div className="text-sm text-gray-600 space-y-1">
-                                        <p>Calories: {selectedItem.nutrition.calories}</p>
-                                        <p>Protein: {selectedItem.nutrition.protein}g</p>
-                                        <p>Carbs: {selectedItem.nutrition.carbs}g</p>
-                                        <p>Fat: {selectedItem.nutrition.fat}g</p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  {selectedItem.allergens.length > 0 && (
-                                    <div className="mt-4">
-                                      <h4 className="font-bold text-brand-black mb-2">Contains:</h4>
-                                      <div className="flex space-x-2">
-                                        {selectedItem.allergens.map((allergen: string, index: number) => (
-                                          <Badge key={index} variant="outline" className="text-xs">
-                                            {allergen}
-                                          </Badge>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                                
-                                {/* Customization Options */}
-                                <div className="border-t pt-6">
-                                  <h4 className="font-bold text-brand-black mb-4">Customize Your Order</h4>
-                                  
-                                  {/* Size Selection */}
-                                  <div className="mb-4">
-                                    <label className="block font-medium text-gray-700 mb-2">Size:</label>
-                                    <div className="grid grid-cols-2 gap-2">
-                                      {selectedItem.sizes.map((size: any, index: number) => (
-                                        <Button
-                                          key={index}
-                                          variant={customizations.size === size.name ? "default" : "outline"}
-                                          className={`${
-                                            customizations.size === size.name 
-                                              ? "bg-brand-red text-white" 
-                                              : "text-brand-black border-gray-300"
-                                          }`}
-                                          onClick={() => setCustomizations({...customizations, size: size.name})}
-                                        >
-                                          {size.name} (${size.price.toFixed(2)})
-                                        </Button>
-                                      ))}
-                                    </div>
-                                  </div>
-                                  
-                                  {/* Add-ons */}
-                                  <div className="mb-4">
-                                    <label className="block font-medium text-gray-700 mb-2">Add-ons:</label>
-                                    <div className="space-y-2">
-                                      {selectedItem.addOns.map((addon: any, index: number) => (
-                                        <label key={index} className="flex items-center space-x-2">
-                                          <input 
-                                            type="checkbox" 
-                                            className="rounded border-gray-300"
-                                            onChange={(e) => {
-                                              if (e.target.checked) {
-                                                setCustomizations({
-                                                  ...customizations,
-                                                  addOns: [...customizations.addOns, addon]
-                                                });
-                                              } else {
-                                                setCustomizations({
-                                                  ...customizations,
-                                                  addOns: customizations.addOns.filter(a => a.name !== addon.name)
-                                                });
-                                              }
-                                            }}
-                                          />
-                                          <span className="text-sm">
-                                            {addon.name} (+${addon.price.toFixed(2)})
-                                          </span>
-                                        </label>
-                                      ))}
-                                    </div>
-                                  </div>
-                                  
-                                  {/* Special Instructions */}
-                                  <div className="mb-6">
-                                    <label className="block font-medium text-gray-700 mb-2">Special Instructions:</label>
-                                    <textarea 
-                                      className="w-full p-3 border border-gray-300 rounded-lg resize-none"
-                                      rows={3}
-                                      placeholder="Any special requests or dietary requirements..."
-                                      value={customizations.instructions}
-                                      onChange={(e) => setCustomizations({...customizations, instructions: e.target.value})}
-                                    />
-                                  </div>
-                                  
-                                  {/* Quantity and Add to Cart */}
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
-                                      <Button 
-                                        variant="outline" 
-                                        size="sm"
-                                        onClick={() => setItemQuantity(Math.max(1, itemQuantity - 1))}
-                                      >
-                                        <Minus className="w-4 h-4" />
-                                      </Button>
-                                      <span className="font-bold text-xl">{itemQuantity}</span>
-                                      <Button 
-                                        variant="outline" 
-                                        size="sm"
-                                        onClick={() => setItemQuantity(itemQuantity + 1)}
-                                      >
-                                        <Plus className="w-4 h-4" />
-                                      </Button>
-                                    </div>
-                                    
-                                    <div className="text-right">
-                                      <div className="text-sm text-gray-600">Total:</div>
-                                      <div className="text-2xl font-arial-black text-brand-red">
-                                        ${calculateTotal().toFixed(2)}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  
-                                  <Button className="w-full bg-brand-red hover:bg-brand-red/90 text-white font-bold text-lg py-3 mt-4">
-                                    <ShoppingCart className="w-5 h-5 mr-2" />
-                                    Add to Cart
-                                  </Button>
-                                </div>
-                              </div>
-                            )}
-                          </DialogContent>
-                        </Dialog>
-                        
-                        <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange">
-                          <ShoppingCart className="w-4 h-4 mr-1" />
-                          Add
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* No Results */}
-            {sortedItems.length === 0 && (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">🍽️</div>
-                <h3 className="text-2xl font-montserrat-bold text-brand-black mb-2">
-                  No items found
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Try adjusting your search or filters to find more delicious options
-                </p>
-                <Button 
-                  onClick={() => {
-                    setSearchTerm("");
-                    setActiveCategory("all");
-                    setPriceRange([0, 50]);
-                  }}
-                  className="bg-brand-red text-white hover:bg-brand-red/90"
-                >
-                  Clear All Filters
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* Order Now CTA */}
-        <div className="text-center mt-16 bg-gradient-to-r from-brand-red to-brand-orange text-white py-12 px-6 rounded-xl">
-          <h3 className="text-3xl font-montserrat-bold mb-4">
+        <div className="text-center mt-12 md:mt-16 bg-gradient-to-r from-brand-red to-brand-orange text-white py-8 md:py-12 px-4 md:px-6 rounded-xl">
+          <h3 className="text-2xl md:text-3xl font-montserrat-bold mb-4">
             Ready to Order? 🍔
           </h3>
-          <p className="text-xl mb-6">
+          <p className="text-lg md:text-xl mb-4 md:mb-6">
             Get your delicious food delivered in just 30 minutes!
           </p>
-          <Button size="lg" className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold text-xl px-12 py-6 rounded-full">
+          <Button size="lg" className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 rounded-full">
             🛒 Proceed to Checkout
           </Button>
         </div>
