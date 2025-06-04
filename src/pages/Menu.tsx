@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Heart, ShoppingCart, Star, Search, Plus, Minus, Clock, TrendingUp } from "lucide-react";
+import { useFavorites } from "@/contexts/FavoritesContext";
+import { useCart } from "@/contexts/CartContext";
 
 const Menu = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,6 +25,9 @@ const Menu = () => {
     spiceLevel: "medium",
     instructions: ""
   });
+
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const { addToCart } = useCart();
 
   const categories = [
     { id: "all", name: "🍽️ All Items", count: 45 },
@@ -232,27 +237,25 @@ const Menu = () => {
     }
   });
 
-  const openItemModal = (item: any) => {
-    setSelectedItem(item);
-    setItemQuantity(1);
-    setCustomizations({
-      size: item.sizes[0].name,
-      addOns: [],
-      spiceLevel: "medium",
-      instructions: ""
-    });
-  };
-
-  const calculateTotal = () => {
-    if (!selectedItem) return 0;
-    const selectedSize = selectedItem.sizes.find((s: any) => s.name === customizations.size);
-    const basePrice = selectedSize ? selectedSize.price : selectedItem.price;
-    const addOnsTotal = customizations.addOns.reduce((sum: number, addon: any) => sum + addon.price, 0);
-    return (basePrice + addOnsTotal) * itemQuantity;
+  const handleAddToCart = (item: any, customizations?: any, quantity?: number) => {
+    const cartItem = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: quantity || 1,
+      customizations: customizations || {
+        size: "medium",
+        addOns: [],
+        spiceLevel: "medium",
+        instructions: ""
+      },
+      image: item.image
+    };
+    addToCart(cartItem);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
       
       {/* Page Header */}
@@ -271,7 +274,7 @@ const Menu = () => {
       </div>
 
       <div className="container mx-auto px-4 py-6 md:py-8">
-        {/* Menu Items Section - Moved before offers */}
+        {/* Menu Items Section */}
         <div className="mb-12">
           {/* Search and Filters */}
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-8">
@@ -322,7 +325,7 @@ const Menu = () => {
               {/* Results Count */}
               <div className="flex items-end">
                 <div className="text-sm text-gray-600">
-                  Showing <span className="font-bold text-brand-red">{sortedItems.length}</span> delicious items
+                  Showing <span className="font-bold text-brand-red">{menuItems.length}</span> delicious items
                 </div>
               </div>
             </div>
@@ -352,24 +355,13 @@ const Menu = () => {
                     </Button>
                   ))}
                 </div>
-
-                {/* Recommended Section */}
-                <div className="mt-6 md:mt-8 p-4 bg-gradient-to-br from-brand-yellow/10 to-brand-orange/10 rounded-lg">
-                  <h4 className="font-montserrat-bold text-brand-black mb-2 text-sm md:text-base">🌟 Recommended for You</h4>
-                  <p className="text-xs md:text-sm text-gray-600 mb-3">
-                    Based on popular choices and ratings
-                  </p>
-                  <Button size="sm" className="bg-brand-red text-white hover:bg-brand-red/90 w-full text-xs md:text-sm">
-                    View Recommendations
-                  </Button>
-                </div>
               </div>
             </div>
 
             {/* Menu Items Grid */}
             <div className="lg:col-span-3">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-                {sortedItems.map((item) => (
+                {menuItems.map((item) => (
                   <Card key={item.id} className="bg-white shadow-lg border-0 overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
                     <div className="relative">
                       <img 
@@ -392,9 +384,14 @@ const Menu = () => {
                       <Button 
                         variant="outline" 
                         size="sm"
-                        className="absolute top-3 right-3 bg-white/90 text-brand-red border-brand-red hover:bg-brand-red hover:text-white p-2"
+                        className={`absolute top-3 right-3 p-2 ${
+                          isFavorite(item.id) 
+                            ? "bg-brand-red text-white border-brand-red" 
+                            : "bg-white/90 text-brand-red border-brand-red hover:bg-brand-red hover:text-white"
+                        }`}
+                        onClick={() => toggleFavorite(item)}
                       >
-                        <Heart className="w-3 h-3 md:w-4 md:h-4" />
+                        <Heart className={`w-3 h-3 md:w-4 md:h-4 ${isFavorite(item.id) ? 'fill-current' : ''}`} />
                       </Button>
                     </div>
                     
@@ -416,178 +413,10 @@ const Menu = () => {
                       <div className="flex items-center justify-between">
                         <span className="text-lg md:text-2xl font-arial-black text-brand-red">${item.price}</span>
                         <div className="space-x-2">
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button 
-                                size="sm"
-                                variant="outline"
-                                className="text-brand-black border-brand-black hover:bg-brand-black hover:text-white text-xs hidden md:inline-flex"
-                                onClick={() => openItemModal(item)}
-                              >
-                                Details
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                              <DialogHeader>
-                                <DialogTitle className="text-2xl font-montserrat-bold text-brand-black">
-                                  {selectedItem?.name}
-                                </DialogTitle>
-                              </DialogHeader>
-                              {selectedItem && (
-                                <div className="space-y-6">
-                                  {/* Item Image */}
-                                  <img 
-                                    src={selectedItem.image} 
-                                    alt={selectedItem.name}
-                                    className="w-full h-64 object-cover rounded-lg"
-                                  />
-                                  
-                                  {/* Description & Details */}
-                                  <div>
-                                    <p className="text-gray-600 mb-4">{selectedItem.description}</p>
-                                    
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                      <div>
-                                        <h4 className="font-bold text-brand-black mb-2">Ingredients:</h4>
-                                        <ul className="text-sm text-gray-600 space-y-1">
-                                          {selectedItem.ingredients.map((ingredient: string, index: number) => (
-                                            <li key={index}>• {ingredient}</li>
-                                          ))}
-                                        </ul>
-                                      </div>
-                                      
-                                      <div>
-                                        <h4 className="font-bold text-brand-black mb-2">Nutrition (per serving):</h4>
-                                        <div className="text-sm text-gray-600 space-y-1">
-                                          <p>Calories: {selectedItem.nutrition.calories}</p>
-                                          <p>Protein: {selectedItem.nutrition.protein}g</p>
-                                          <p>Carbs: {selectedItem.nutrition.carbs}g</p>
-                                          <p>Fat: {selectedItem.nutrition.fat}g</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    
-                                    {selectedItem.allergens.length > 0 && (
-                                      <div className="mt-4">
-                                        <h4 className="font-bold text-brand-black mb-2">Contains:</h4>
-                                        <div className="flex space-x-2">
-                                          {selectedItem.allergens.map((allergen: string, index: number) => (
-                                            <Badge key={index} variant="outline" className="text-xs">
-                                              {allergen}
-                                            </Badge>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                  
-                                  {/* Customization Options */}
-                                  <div className="border-t pt-6">
-                                    <h4 className="font-bold text-brand-black mb-4">Customize Your Order</h4>
-                                    
-                                    {/* Size Selection */}
-                                    <div className="mb-4">
-                                      <label className="block font-medium text-gray-700 mb-2">Size:</label>
-                                      <div className="grid grid-cols-2 gap-2">
-                                        {selectedItem.sizes.map((size: any, index: number) => (
-                                          <Button
-                                            key={index}
-                                            variant={customizations.size === size.name ? "default" : "outline"}
-                                            className={`${
-                                              customizations.size === size.name 
-                                                ? "bg-brand-red text-white" 
-                                                : "text-brand-black border-gray-300"
-                                            }`}
-                                            onClick={() => setCustomizations({...customizations, size: size.name})}
-                                          >
-                                            {size.name} (${size.price.toFixed(2)})
-                                          </Button>
-                                        ))}
-                                      </div>
-                                    </div>
-                                    
-                                    {/* Add-ons */}
-                                    <div className="mb-4">
-                                      <label className="block font-medium text-gray-700 mb-2">Add-ons:</label>
-                                      <div className="space-y-2">
-                                        {selectedItem.addOns.map((addon: any, index: number) => (
-                                          <label key={index} className="flex items-center space-x-2">
-                                            <input 
-                                              type="checkbox" 
-                                              className="rounded border-gray-300"
-                                              onChange={(e) => {
-                                                if (e.target.checked) {
-                                                  setCustomizations({
-                                                    ...customizations,
-                                                    addOns: [...customizations.addOns, addon]
-                                                  });
-                                                } else {
-                                                  setCustomizations({
-                                                    ...customizations,
-                                                    addOns: customizations.addOns.filter(a => a.name !== addon.name)
-                                                  });
-                                                }
-                                              }}
-                                            />
-                                            <span className="text-sm">
-                                              {addon.name} (+${addon.price.toFixed(2)})
-                                            </span>
-                                          </label>
-                                        ))}
-                                      </div>
-                                    </div>
-                                    
-                                    {/* Special Instructions */}
-                                    <div className="mb-6">
-                                      <label className="block font-medium text-gray-700 mb-2">Special Instructions:</label>
-                                      <textarea 
-                                        className="w-full p-3 border border-gray-300 rounded-lg resize-none"
-                                        rows={3}
-                                        placeholder="Any special requests or dietary requirements..."
-                                        value={customizations.instructions}
-                                        onChange={(e) => setCustomizations({...customizations, instructions: e.target.value})}
-                                      />
-                                    </div>
-                                    
-                                    {/* Quantity and Add to Cart */}
-                                    <div className="flex items-center justify-between">
-                                      <div className="flex items-center space-x-3">
-                                        <Button 
-                                          variant="outline" 
-                                          size="sm"
-                                          onClick={() => setItemQuantity(Math.max(1, itemQuantity - 1))}
-                                        >
-                                          <Minus className="w-4 h-4" />
-                                        </Button>
-                                        <span className="font-bold text-xl">{itemQuantity}</span>
-                                        <Button 
-                                          variant="outline" 
-                                          size="sm"
-                                          onClick={() => setItemQuantity(itemQuantity + 1)}
-                                        >
-                                          <Plus className="w-4 h-4" />
-                                        </Button>
-                                      </div>
-                                      
-                                      <div className="text-right">
-                                        <div className="text-sm text-gray-600">Total:</div>
-                                        <div className="text-2xl font-arial-black text-brand-red">
-                                          ${calculateTotal().toFixed(2)}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    
-                                    <Button className="w-full bg-brand-red hover:bg-brand-red/90 text-white font-bold text-lg py-3 mt-4">
-                                      <ShoppingCart className="w-5 h-5 mr-2" />
-                                      Add to Cart
-                                    </Button>
-                                  </div>
-                                </div>
-                              )}
-                            </DialogContent>
-                          </Dialog>
-                          
-                          <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange text-xs md:text-sm px-2 md:px-4">
+                          <Button 
+                            className="bg-brand-yellow text-brand-black hover:bg-brand-orange text-xs md:text-sm px-2 md:px-4"
+                            onClick={() => handleAddToCart(item)}
+                          >
                             <ShoppingCart className="w-3 h-3 md:w-4 md:h-4 mr-1" />
                             Add
                           </Button>
@@ -597,29 +426,6 @@ const Menu = () => {
                   </Card>
                 ))}
               </div>
-
-              {/* No Results */}
-              {sortedItems.length === 0 && (
-                <div className="text-center py-12">
-                  <div className="text-4xl md:text-6xl mb-4">🍽️</div>
-                  <h3 className="text-xl md:text-2xl font-montserrat-bold text-brand-black mb-2">
-                    No items found
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Try adjusting your search or filters to find more delicious options
-                  </p>
-                  <Button 
-                    onClick={() => {
-                      setSearchTerm("");
-                      setActiveCategory("all");
-                      setPriceRange([50]);
-                    }}
-                    className="bg-brand-red text-white hover:bg-brand-red/90"
-                  >
-                    Clear All Filters
-                  </Button>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -682,7 +488,10 @@ const Menu = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-lg md:text-xl font-arial-black text-brand-red">${item.price}</span>
-                      <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange text-xs md:text-sm px-3 md:px-4">
+                      <Button 
+                        className="bg-brand-yellow text-brand-black hover:bg-brand-orange text-xs md:text-sm px-3 md:px-4"
+                        onClick={() => handleAddToCart(bestSellers.find(bs => bs.id === item.id))}
+                      >
                         Quick Order
                       </Button>
                     </div>

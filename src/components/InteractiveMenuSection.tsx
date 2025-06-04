@@ -6,11 +6,15 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useFavorites } from "@/contexts/FavoritesContext";
+import { useCart } from "@/contexts/CartContext";
 
 const InteractiveMenuSection = () => {
   const [activeCategory, setActiveCategory] = useState("burgers");
-  const [priceRange, setPriceRange] = useState([0, 50]);
+  const [priceRange, setPriceRange] = useState([25]);
   const [sortBy, setSortBy] = useState("popular");
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const { addToCart } = useCart();
 
   const categories = [
     { id: "burgers", name: "🍔 Burgers", count: 12 },
@@ -28,7 +32,8 @@ const InteractiveMenuSection = () => {
         image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         rating: 4.9,
         isBestSeller: true,
-        description: "Double beef patty, special sauce, lettuce, cheese"
+        description: "Double beef patty, special sauce, lettuce, cheese",
+        category: "burgers"
       },
       {
         id: 2,
@@ -37,7 +42,8 @@ const InteractiveMenuSection = () => {
         image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         rating: 4.7,
         isBestSeller: false,
-        description: "Beef patty, cheese, lettuce, tomato, onion"
+        description: "Beef patty, cheese, lettuce, tomato, onion",
+        category: "burgers"
       },
       {
         id: 3,
@@ -46,7 +52,8 @@ const InteractiveMenuSection = () => {
         image: "https://images.unsplash.com/photo-1553979459-d2229ba7433a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         rating: 4.8,
         isBestSeller: true,
-        description: "BBQ sauce, bacon, onion rings, cheddar cheese"
+        description: "BBQ sauce, bacon, onion rings, cheddar cheese",
+        category: "burgers"
       }
     ],
     pizza: [
@@ -57,7 +64,8 @@ const InteractiveMenuSection = () => {
         image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         rating: 4.9,
         isBestSeller: true,
-        description: "Pepperoni, mozzarella, tomato sauce"
+        description: "Pepperoni, mozzarella, tomato sauce",
+        category: "pizza"
       },
       {
         id: 5,
@@ -66,15 +74,33 @@ const InteractiveMenuSection = () => {
         image: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
         rating: 4.6,
         isBestSeller: false,
-        description: "Fresh mozzarella, basil, tomato sauce"
+        description: "Fresh mozzarella, basil, tomato sauce",
+        category: "pizza"
       }
     ]
   };
 
   const currentItems = menuItems[activeCategory] || [];
 
+  const handleAddToCart = (item: any) => {
+    const cartItem = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: 1,
+      customizations: {
+        size: "medium",
+        addOns: [],
+        spiceLevel: "medium",
+        instructions: ""
+      },
+      image: item.image
+    };
+    addToCart(cartItem);
+  };
+
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gray-50 overflow-x-hidden">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -106,8 +132,10 @@ const InteractiveMenuSection = () => {
 
         {/* Filters */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 bg-white p-6 rounded-lg shadow-md">
-          <div className="flex-1">
-            <label className="block text-sm font-bold text-gray-700 mb-2">Price Range: ${priceRange[0]} - ${priceRange[1]}</label>
+          <div className="flex-1 w-full md:w-auto">
+            <label className="block text-sm font-bold text-gray-700 mb-2">
+              Max Price: ${priceRange[0]}
+            </label>
             <Slider
               value={priceRange}
               onValueChange={setPriceRange}
@@ -151,9 +179,14 @@ const InteractiveMenuSection = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="absolute top-4 right-4 bg-white/90 text-brand-red border-brand-red hover:bg-brand-red hover:text-white"
+                  className={`absolute top-4 right-4 ${
+                    isFavorite(item.id) 
+                      ? "bg-brand-red text-white border-brand-red" 
+                      : "bg-white/90 text-brand-red border-brand-red hover:bg-brand-red hover:text-white"
+                  }`}
+                  onClick={() => toggleFavorite(item)}
                 >
-                  <Heart className="w-4 h-4" />
+                  <Heart className={`w-4 h-4 ${isFavorite(item.id) ? 'fill-current' : ''}`} />
                 </Button>
               </div>
               
@@ -170,7 +203,10 @@ const InteractiveMenuSection = () => {
                 
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-arial-black text-brand-red">${item.price}</span>
-                  <Button className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold">
+                  <Button 
+                    className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold"
+                    onClick={() => handleAddToCart(item)}
+                  >
                     <ShoppingCart className="w-4 h-4 mr-1" />
                     Add to Cart
                   </Button>

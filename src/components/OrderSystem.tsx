@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,20 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ShoppingCart, Plus, Minus, Trash2, X, Clock, MapPin, Phone, Mail, CreditCard, DollarSign } from "lucide-react";
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  customizations: {
-    size: string;
-    addOns: Array<{name: string; price: number}>;
-    spiceLevel: string;
-    instructions: string;
-  };
-  image: string;
-}
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface OrderSystemProps {
   isOpen: boolean;
@@ -30,7 +17,6 @@ interface OrderSystemProps {
 
 const OrderSystem = ({ isOpen, onClose }: OrderSystemProps) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [couponCode, setCouponCode] = useState("");
   const [orderDetails, setOrderDetails] = useState({
     firstName: "",
@@ -49,26 +35,25 @@ const OrderSystem = ({ isOpen, onClose }: OrderSystemProps) => {
   const [orderNumber, setOrderNumber] = useState("");
   const [orderStatus, setOrderStatus] = useState("received");
 
+  const { cartItems, updateQuantity, removeFromCart, cartTotal, clearCart } = useCart();
+  const { user, isLoggedIn } = useAuth();
+
   const deliveryFee = 2.50;
-  const subtotal = cartItems.reduce((sum, item) => {
-    const addOnsTotal = item.customizations.addOns.reduce((total, addon) => total + addon.price, 0);
-    return sum + ((item.price + addOnsTotal) * item.quantity);
-  }, 0);
+  const subtotal = cartTotal;
   const total = subtotal + deliveryFee;
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity === 0) {
-      setCartItems(cartItems.filter(item => item.id !== id));
-    } else {
-      setCartItems(cartItems.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      ));
+  // Pre-fill user data if logged in
+  useEffect(() => {
+    if (isLoggedIn && user) {
+      setOrderDetails(prev => ({
+        ...prev,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        email: user.email
+      }));
     }
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
+  }, [isLoggedIn, user]);
 
   const generateOrderNumber = () => {
     return "FB" + Date.now().toString().slice(-6);
@@ -78,6 +63,7 @@ const OrderSystem = ({ isOpen, onClose }: OrderSystemProps) => {
     const newOrderNumber = generateOrderNumber();
     setOrderNumber(newOrderNumber);
     setCurrentStep(4);
+    clearCart();
     // Here you would typically send the order to your backend
   };
 
@@ -140,7 +126,7 @@ const OrderSystem = ({ isOpen, onClose }: OrderSystemProps) => {
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => removeFromCart(item.id)}
                           >
                             <Trash2 className="w-3 h-3" />
                           </Button>
