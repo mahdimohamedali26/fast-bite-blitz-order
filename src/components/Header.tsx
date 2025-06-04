@@ -23,6 +23,7 @@ const Header = () => {
     <>
       <header className="bg-white shadow-lg sticky top-0 z-50 w-full overflow-x-hidden">
         <div className="container mx-auto px-4">
+          {/* Top Row: Logo, Search, Actions */}
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
@@ -30,28 +31,7 @@ const Header = () => {
               <div className="text-xl">🍔</div>
             </Link>
 
-            {/* Centered Desktop Navigation */}
-            <nav className="hidden lg:flex items-center justify-center flex-1 max-w-2xl mx-8">
-              <div className="flex items-center space-x-12 justify-evenly w-full">
-                <Link to="/" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
-                  Home
-                </Link>
-                <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
-                  Menu
-                </Link>
-                <Link to="/#offers" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
-                  Offers
-                </Link>
-                <Link to="/#reviews" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
-                  Reviews
-                </Link>
-                <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
-                  About
-                </Link>
-              </div>
-            </nav>
-
-            {/* Search Bar - Desktop */}
+            {/* Search Bar - Center */}
             <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
               <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -62,7 +42,7 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Right Section */}
+            {/* Right Section - Actions */}
             <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
               {/* Delivery Badge - Hidden on mobile */}
               <Badge className="hidden lg:flex bg-brand-yellow text-brand-black font-bold px-3 py-1">
@@ -154,9 +134,30 @@ const Header = () => {
             </div>
           </div>
 
+          {/* Navigation Menu - Centered */}
+          <div className="hidden lg:flex items-center justify-center py-4 border-t border-gray-100">
+            <nav className="flex items-center space-x-12">
+              <Link to="/" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                Home
+              </Link>
+              <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                Menu
+              </Link>
+              <Link to="/#offers" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                Offers
+              </Link>
+              <Link to="/#reviews" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                Reviews
+              </Link>
+              <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                About
+              </Link>
+            </nav>
+          </div>
+
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <nav className="lg:hidden pb-4 space-y-2">
+            <nav className="lg:hidden pb-4 space-y-2 border-t border-gray-100 pt-4">
               <Link 
                 to="/" 
                 className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"

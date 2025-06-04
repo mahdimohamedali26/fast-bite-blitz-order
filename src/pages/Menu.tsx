@@ -21,13 +21,13 @@ const Menu = () => {
   const { addToCart } = useCart();
 
   const categories = [
-    { id: "all", name: "🍽️ All Items", count: 45 },
-    { id: "burgers", name: "🍔 Burgers", count: 12 },
-    { id: "pizza", name: "🍕 Pizza", count: 8 },
-    { id: "chicken", name: "🍗 Chicken", count: 10 },
-    { id: "sides", name: "🍟 Sides", count: 8 },
-    { id: "drinks", name: "🥤 Drinks", count: 7 },
-    { id: "desserts", name: "🍰 Desserts", count: 5 }
+    { id: "all", name: "🍽️ All Items", count: 72 },
+    { id: "burgers", name: "🍔 Burgers", count: 15 },
+    { id: "pizza", name: "🍕 Pizza", count: 10 },
+    { id: "chicken", name: "🍗 Chicken", count: 12 },
+    { id: "sides", name: "🍟 Sides", count: 10 },
+    { id: "drinks", name: "🥤 Drinks", count: 8 },
+    { id: "desserts", name: "🍰 Desserts", count: 12 }
   ];
 
   const menuItems = [
@@ -57,6 +57,52 @@ const Menu = () => {
       ]
     },
     {
+      id: 51,
+      name: "Classic Cheeseburger",
+      category: "burgers",
+      price: 8.99,
+      image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      rating: 4.7,
+      orders: 2156,
+      isBestSeller: false,
+      isNew: false,
+      description: "Classic beef patty with American cheese, lettuce, tomato, onion, pickles, ketchup, and mustard.",
+      ingredients: ["Beef patty", "American cheese", "Lettuce", "Tomato", "Onion", "Pickles"],
+      allergens: ["Gluten", "Dairy"],
+      nutrition: { calories: 520, protein: 28, carbs: 35, fat: 28 },
+      sizes: [
+        { name: "Regular", price: 8.99 },
+        { name: "Large", price: 11.99 }
+      ],
+      addOns: [
+        { name: "Extra Cheese", price: 1.50 },
+        { name: "Bacon", price: 2.50 }
+      ]
+    },
+    {
+      id: 52,
+      name: "BBQ Bacon Burger",
+      category: "burgers",
+      price: 14.99,
+      image: "https://images.unsplash.com/photo-1553979459-d2229ba7433a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      rating: 4.8,
+      orders: 1923,
+      isBestSeller: true,
+      isNew: false,
+      description: "Juicy beef patty with smoky BBQ sauce, crispy bacon, onion rings, and cheddar cheese.",
+      ingredients: ["Beef patty", "BBQ sauce", "Bacon", "Onion rings", "Cheddar cheese"],
+      allergens: ["Gluten", "Dairy"],
+      nutrition: { calories: 720, protein: 38, carbs: 42, fat: 45 },
+      sizes: [
+        { name: "Regular", price: 14.99 },
+        { name: "Large", price: 17.99 }
+      ],
+      addOns: [
+        { name: "Extra Bacon", price: 2.50 },
+        { name: "Onion Rings", price: 2.00 }
+      ]
+    },
+    {
       id: 2,
       name: "Pepperoni Supreme Pizza",
       category: "pizza",
@@ -80,6 +126,30 @@ const Menu = () => {
         { name: "Mushrooms", price: 1.50 },
         { name: "Bell Peppers", price: 1.50 },
         { name: "Olives", price: 1.50 }
+      ]
+    },
+    {
+      id: 53,
+      name: "Margherita Classic",
+      category: "pizza",
+      price: 13.99,
+      image: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      rating: 4.6,
+      orders: 1745,
+      isBestSeller: false,
+      isNew: false,
+      description: "Traditional Italian pizza with fresh mozzarella, basil, and tomato sauce.",
+      ingredients: ["Pizza dough", "Tomato sauce", "Fresh mozzarella", "Basil"],
+      allergens: ["Gluten", "Dairy"],
+      nutrition: { calories: 280, protein: 14, carbs: 32, fat: 12 },
+      sizes: [
+        { name: "Small (10\")", price: 11.99 },
+        { name: "Medium (12\")", price: 13.99 },
+        { name: "Large (14\")", price: 16.99 }
+      ],
+      addOns: [
+        { name: "Extra Basil", price: 1.00 },
+        { name: "Cherry Tomatoes", price: 1.50 }
       ]
     },
     {
@@ -153,57 +223,98 @@ const Menu = () => {
         { name: "Extra Whipped Cream", price: 0.50 },
         { name: "Cherry on Top", price: 0.50 }
       ]
-    }
-  ];
-
-  const specialOffers = [
-    {
-      id: 1,
-      title: "Buy 2 Get 1 FREE",
-      subtitle: "Any Burger",
-      validUntil: "Tomorrow",
-      discount: "33% OFF",
-      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
     },
     {
-      id: 2,
-      title: "Family Pizza Deal",
-      subtitle: "Large Pizza + 4 Drinks",
-      validUntil: "This Week",
-      discount: "40% OFF",
-      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+      id: 57,
+      name: "Glazed Donuts",
+      category: "desserts",
+      price: 5.99,
+      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      rating: 4.6,
+      orders: 1234,
+      isBestSeller: true,
+      isNew: false,
+      description: "Fresh glazed donuts with sweet glaze coating (pack of 6).",
+      ingredients: ["Donuts", "Sweet glaze"],
+      allergens: ["Gluten", "Dairy", "Eggs"],
+      nutrition: { calories: 280, protein: 4, carbs: 45, fat: 12 },
+      sizes: [
+        { name: "6 Pack", price: 5.99 },
+        { name: "12 Pack", price: 10.99 }
+      ],
+      addOns: [
+        { name: "Chocolate Drizzle", price: 1.00 },
+        { name: "Sprinkles", price: 0.50 }
+      ]
     },
     {
-      id: 3,
-      title: "Student Special",
-      subtitle: "Burger + Fries + Drink",
-      validUntil: "Today Only",
-      discount: "25% OFF",
-      image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-    }
-  ];
-
-  const bestSellers = [
-    {
-      id: 1,
-      name: "FastBite Supreme Burger",
-      price: 12.99,
-      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      orders: 2847
+      id: 58,
+      name: "Chocolate Cake Slice",
+      category: "desserts",
+      price: 6.99,
+      image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      rating: 4.8,
+      orders: 987,
+      isBestSeller: true,
+      isNew: false,
+      description: "Rich chocolate cake with chocolate frosting and chocolate shavings.",
+      ingredients: ["Chocolate cake", "Chocolate frosting", "Chocolate shavings"],
+      allergens: ["Gluten", "Dairy", "Eggs"],
+      nutrition: { calories: 450, protein: 6, carbs: 65, fat: 20 },
+      sizes: [
+        { name: "Single Slice", price: 6.99 },
+        { name: "Double Slice", price: 12.99 }
+      ],
+      addOns: [
+        { name: "Ice Cream Scoop", price: 2.00 },
+        { name: "Whipped Cream", price: 1.00 }
+      ]
     },
     {
-      id: 2,
-      name: "Loaded Cheese Fries",
+      id: 59,
+      name: "Boston Cream Donuts",
+      category: "desserts",
+      price: 6.99,
+      image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      rating: 4.7,
+      orders: 876,
+      isBestSeller: false,
+      isNew: true,
+      description: "Cream-filled donuts with chocolate glaze (pack of 4).",
+      ingredients: ["Donuts", "Cream filling", "Chocolate glaze"],
+      allergens: ["Gluten", "Dairy", "Eggs"],
+      nutrition: { calories: 320, protein: 5, carbs: 48, fat: 15 },
+      sizes: [
+        { name: "4 Pack", price: 6.99 },
+        { name: "8 Pack", price: 12.99 }
+      ],
+      addOns: [
+        { name: "Extra Cream", price: 1.50 },
+        { name: "Extra Chocolate", price: 1.00 }
+      ]
+    },
+    {
+      id: 60,
+      name: "Strawberry Cheesecake",
+      category: "desserts",
       price: 7.99,
-      image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      orders: 3241
-    },
-    {
-      id: 3,
-      name: "Pepperoni Supreme Pizza",
-      price: 16.99,
-      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-      orders: 2156
+      image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      rating: 4.9,
+      orders: 765,
+      isBestSeller: true,
+      isNew: false,
+      description: "Creamy cheesecake topped with fresh strawberries and graham cracker crust.",
+      ingredients: ["Cheesecake", "Fresh strawberries", "Graham cracker crust"],
+      allergens: ["Gluten", "Dairy", "Eggs"],
+      nutrition: { calories: 380, protein: 7, carbs: 42, fat: 22 },
+      sizes: [
+        { name: "Single Slice", price: 7.99 },
+        { name: "Half Cake", price: 24.99 }
+      ],
+      addOns: [
+        { name: "Extra Strawberries", price: 1.50 },
+        { name: "Whipped Cream", price: 1.00 }
+      ]
     }
   ];
 
@@ -246,6 +357,57 @@ const Menu = () => {
     addToCart(cartItem);
   };
 
+  const specialOffers = [
+    {
+      id: 1,
+      title: "Buy 2 Get 1 FREE",
+      subtitle: "Any Burger",
+      validUntil: "Tomorrow",
+      discount: "33% OFF",
+      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+    },
+    {
+      id: 2,
+      title: "Family Pizza Deal",
+      subtitle: "Large Pizza + 4 Drinks",
+      validUntil: "This Week",
+      discount: "40% OFF",
+      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+    },
+    {
+      id: 3,
+      title: "Sweet Treats Special",
+      subtitle: "Any 2 Desserts",
+      validUntil: "Today Only",
+      discount: "25% OFF",
+      image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+    }
+  ];
+
+  const bestSellers = [
+    {
+      id: 1,
+      name: "FastBite Supreme Burger",
+      price: 12.99,
+      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      orders: 2847
+    },
+    {
+      id: 4,
+      name: "Loaded Cheese Fries",
+      price: 7.99,
+      image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      orders: 3241
+    },
+    {
+      id: 57,
+      name: "Glazed Donuts",
+      price: 5.99,
+      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      orders: 1234
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
@@ -260,7 +422,7 @@ const Menu = () => {
             Discover our full range of mouth-watering fast food favorites
           </p>
           <Badge className="bg-brand-yellow text-brand-black font-bold text-xs sm:text-sm md:text-lg px-3 sm:px-4 md:px-6 py-1 sm:py-2">
-            🔥 45+ Delicious Items Available
+            🔥 72+ Delicious Items Available
           </Badge>
         </div>
       </div>
