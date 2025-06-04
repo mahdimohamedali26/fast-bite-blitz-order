@@ -10,6 +10,7 @@ import { useFavorites } from "@/contexts/FavoritesContext";
 import { useAuth } from "@/contexts/AuthContext";
 import OrderSystem from "@/components/OrderSystem";
 import AuthModal from "@/components/AuthModal";
+import OrderTracking from "@/components/OrderTracking";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,6 +58,9 @@ const Header = () => {
                 <Phone className="w-4 h-4 mr-1" />
                 <span className="text-sm">(123) 456-7890</span>
               </a>
+
+              {/* Order Tracking */}
+              <OrderTracking />
 
               {/* Favorites */}
               <Link to="/favorites">
@@ -143,14 +147,11 @@ const Header = () => {
               <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
                 Menu
               </Link>
-              <Link to="/#offers" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
-                Offers
-              </Link>
-              <Link to="/#reviews" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
-                Reviews
-              </Link>
               <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
                 About
+              </Link>
+              <Link to="/contact" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                Contact
               </Link>
             </nav>
           </div>
@@ -173,25 +174,18 @@ const Header = () => {
                 Menu
               </Link>
               <Link 
-                to="/#offers" 
-                className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Offers
-              </Link>
-              <Link 
-                to="/#reviews" 
-                className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Reviews
-              </Link>
-              <Link 
                 to="/about" 
                 className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
+              </Link>
+              <Link 
+                to="/contact" 
+                className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
               </Link>
               <a 
                 href="tel:+1234567890" 
