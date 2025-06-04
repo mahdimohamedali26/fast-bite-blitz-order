@@ -100,7 +100,7 @@ const InteractiveMenuSection = () => {
   };
 
   return (
-    <section className="py-16 bg-gray-50 overflow-x-hidden">
+    <section className="py-16 bg-gray-50 overflow-x-hidden" id="menu">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -112,13 +112,13 @@ const InteractiveMenuSection = () => {
           </p>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
+        {/* Category Tabs - Mobile Horizontal Layout */}
+        <div className="flex flex-nowrap overflow-x-auto sm:flex-wrap sm:justify-center gap-2 sm:gap-4 mb-8 pb-2 sm:pb-0">
           {categories.map((category) => (
             <Button
               key={category.id}
               variant={activeCategory === category.id ? "default" : "outline"}
-              className={`font-roboto-bold text-lg px-6 py-3 rounded-full transition-all duration-300 ${
+              className={`font-roboto-bold text-sm sm:text-lg px-4 sm:px-6 py-2 sm:py-3 rounded-full transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                 activeCategory === category.id 
                   ? "bg-brand-red text-white shadow-lg scale-105" 
                   : "text-brand-black border-brand-red hover:bg-brand-red hover:text-white"
@@ -216,12 +216,12 @@ const InteractiveMenuSection = () => {
           ))}
         </div>
 
-        {/* View Full Menu CTA */}
+        {/* View Full Menu CTA - Mobile Responsive */}
         <div className="text-center">
           <Link to="/menu">
             <Button 
               size="lg" 
-              className="bg-brand-red hover:bg-brand-red/90 text-white font-montserrat-bold text-xl px-12 py-6 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
+              className="bg-brand-red hover:bg-brand-red/90 text-white font-montserrat-bold text-lg sm:text-xl px-6 sm:px-12 py-4 sm:py-6 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
             >
               🍽️ View Full Menu & Order Now!
             </Button>

@@ -7,8 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Heart, ShoppingCart, Star, Search, Plus, Minus, Clock, TrendingUp } from "lucide-react";
+import { Heart, ShoppingCart, Star, Search, Clock, TrendingUp } from "lucide-react";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useCart } from "@/contexts/CartContext";
 
@@ -17,14 +16,6 @@ const Menu = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [priceRange, setPriceRange] = useState([25]);
   const [sortBy, setSortBy] = useState("popular");
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [itemQuantity, setItemQuantity] = useState(1);
-  const [customizations, setCustomizations] = useState({
-    size: "medium",
-    addOns: [] as any[],
-    spiceLevel: "medium",
-    instructions: ""
-  });
 
   const { toggleFavorite, isFavorite } = useFavorites();
   const { addToCart } = useCart();
@@ -35,7 +26,8 @@ const Menu = () => {
     { id: "pizza", name: "🍕 Pizza", count: 8 },
     { id: "chicken", name: "🍗 Chicken", count: 10 },
     { id: "sides", name: "🍟 Sides", count: 8 },
-    { id: "drinks", name: "🥤 Drinks", count: 7 }
+    { id: "drinks", name: "🥤 Drinks", count: 7 },
+    { id: "desserts", name: "🍰 Desserts", count: 5 }
   ];
 
   const menuItems = [
@@ -237,13 +229,13 @@ const Menu = () => {
     }
   });
 
-  const handleAddToCart = (item: any, customizations?: any, quantity?: number) => {
+  const handleAddToCart = (item: any) => {
     const cartItem = {
       id: item.id,
       name: item.name,
       price: item.price,
-      quantity: quantity || 1,
-      customizations: customizations || {
+      quantity: 1,
+      customizations: {
         size: "medium",
         addOns: [],
         spiceLevel: "medium",
@@ -259,15 +251,15 @@ const Menu = () => {
       <Header />
       
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-12 md:py-16">
+      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-8 sm:py-12 md:py-16">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-arial-black mb-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-arial-black mb-4">
             Our Complete <span className="text-brand-yellow">Menu</span>
           </h1>
-          <p className="text-lg md:text-xl mb-6 md:mb-8">
+          <p className="text-base sm:text-lg md:text-xl mb-4 sm:mb-6 md:mb-8">
             Discover our full range of mouth-watering fast food favorites
           </p>
-          <Badge className="bg-brand-yellow text-brand-black font-bold text-sm md:text-lg px-4 md:px-6 py-2">
+          <Badge className="bg-brand-yellow text-brand-black font-bold text-xs sm:text-sm md:text-lg px-3 sm:px-4 md:px-6 py-1 sm:py-2">
             🔥 45+ Delicious Items Available
           </Badge>
         </div>
@@ -325,23 +317,24 @@ const Menu = () => {
               {/* Results Count */}
               <div className="flex items-end">
                 <div className="text-sm text-gray-600">
-                  Showing <span className="font-bold text-brand-red">{menuItems.length}</span> delicious items
+                  Showing <span className="font-bold text-brand-red">{sortedItems.length}</span> delicious items
                 </div>
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-8">
-            {/* Categories Sidebar */}
+            {/* Categories Sidebar - Responsive */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 sticky top-24">
+              {/* Mobile: Horizontal scroll, Desktop: Vertical */}
+              <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 lg:sticky lg:top-24">
                 <h3 className="text-lg md:text-xl font-montserrat-bold text-brand-black mb-4 md:mb-6">Categories</h3>
-                <div className="space-y-2">
+                <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0">
                   {categories.map((category) => (
                     <Button
                       key={category.id}
                       variant={activeCategory === category.id ? "default" : "outline"}
-                      className={`w-full justify-between font-medium text-sm md:text-base ${
+                      className={`whitespace-nowrap flex-shrink-0 lg:w-full justify-between font-medium text-sm md:text-base ${
                         activeCategory === category.id
                           ? "bg-brand-red text-white"
                           : "text-brand-black border-gray-200 hover:border-brand-red hover:text-brand-red"
@@ -349,7 +342,7 @@ const Menu = () => {
                       onClick={() => setActiveCategory(category.id)}
                     >
                       <span>{category.name}</span>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs ml-2">
                         {category.count}
                       </Badge>
                     </Button>
@@ -361,7 +354,7 @@ const Menu = () => {
             {/* Menu Items Grid */}
             <div className="lg:col-span-3">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-                {menuItems.map((item) => (
+                {sortedItems.map((item) => (
                   <Card key={item.id} className="bg-white shadow-lg border-0 overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
                     <div className="relative">
                       <img 
@@ -430,16 +423,16 @@ const Menu = () => {
           </div>
         </div>
 
-        {/* Special Offers Section */}
-        <div className="mb-12">
+        {/* Special Offers Section - Mobile Optimized Grid */}
+        <div className="mb-12" id="offers">
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-arial-black text-brand-black mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-arial-black text-brand-black mb-4">
               🔥 Special <span className="text-brand-red">Offers</span>
             </h2>
-            <p className="text-lg md:text-xl text-gray-600">Limited time deals you can't miss!</p>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600">Limited time deals you can't miss!</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
             {specialOffers.map((offer) => (
               <Card key={offer.id} className="bg-gradient-to-br from-brand-red to-brand-orange text-white overflow-hidden transform hover:scale-105 transition-all duration-300">
                 <CardContent className="p-0">
@@ -459,18 +452,29 @@ const Menu = () => {
               </Card>
             ))}
           </div>
+
+          {/* Mobile Responsive CTA */}
+          <div className="text-center">
+            <Button 
+              size="lg" 
+              className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold text-sm sm:text-lg px-4 sm:px-8 py-3 sm:py-4 rounded-full"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              🛒 Order These Specials Now!
+            </Button>
+          </div>
         </div>
 
         {/* Best Sellers Section */}
         <div className="mb-12">
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-arial-black text-brand-black mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-arial-black text-brand-black mb-4">
               ⭐ Best <span className="text-brand-red">Sellers</span>
             </h2>
-            <p className="text-lg md:text-xl text-gray-600">Our customers' absolute favorites!</p>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600">Our customers' absolute favorites!</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
             {bestSellers.map((item, index) => (
               <Card key={item.id} className="bg-white shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
                 <CardContent className="p-0">
@@ -502,15 +506,19 @@ const Menu = () => {
           </div>
         </div>
 
-        {/* Order Now CTA */}
-        <div className="text-center mt-12 md:mt-16 bg-gradient-to-r from-brand-red to-brand-orange text-white py-8 md:py-12 px-4 md:px-6 rounded-xl">
-          <h3 className="text-2xl md:text-3xl font-montserrat-bold mb-4">
+        {/* Order Now CTA - Mobile Responsive */}
+        <div className="text-center mt-8 sm:mt-12 md:mt-16 bg-gradient-to-r from-brand-red to-brand-orange text-white py-6 sm:py-8 md:py-12 px-4 md:px-6 rounded-xl">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-montserrat-bold mb-4">
             Ready to Order? 🍔
           </h3>
-          <p className="text-lg md:text-xl mb-4 md:mb-6">
+          <p className="text-base sm:text-lg md:text-xl mb-4 md:mb-6">
             Get your delicious food delivered in just 30 minutes!
           </p>
-          <Button size="lg" className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 rounded-full">
+          <Button 
+            size="lg" 
+            className="bg-brand-yellow text-brand-black hover:bg-brand-orange font-bold text-sm sm:text-lg md:text-xl px-4 sm:px-8 md:px-12 py-3 sm:py-4 md:py-6 rounded-full"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
             🛒 Proceed to Checkout
           </Button>
         </div>

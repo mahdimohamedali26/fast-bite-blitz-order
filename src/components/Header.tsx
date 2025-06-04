@@ -30,20 +30,25 @@ const Header = () => {
               <div className="text-xl">🍔</div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-8">
-              <Link to="/" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors">
-                Home
-              </Link>
-              <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors">
-                Menu
-              </Link>
-              <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors">
-                About
-              </Link>
-              <Link to="/contact" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors">
-                Contact
-              </Link>
+            {/* Centered Desktop Navigation */}
+            <nav className="hidden lg:flex items-center justify-center flex-1 max-w-2xl mx-8">
+              <div className="flex items-center space-x-12 justify-evenly w-full">
+                <Link to="/" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                  Home
+                </Link>
+                <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                  Menu
+                </Link>
+                <Link to="/#offers" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                  Offers
+                </Link>
+                <Link to="/#reviews" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                  Reviews
+                </Link>
+                <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+                  About
+                </Link>
+              </div>
             </nav>
 
             {/* Search Bar - Desktop */}
@@ -167,18 +172,25 @@ const Header = () => {
                 Menu
               </Link>
               <Link 
+                to="/#offers" 
+                className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Offers
+              </Link>
+              <Link 
+                to="/#reviews" 
+                className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Reviews
+              </Link>
+              <Link 
                 to="/about" 
                 className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
-              </Link>
-              <Link 
-                to="/contact" 
-                className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contact
               </Link>
               <a 
                 href="tel:+1234567890" 
