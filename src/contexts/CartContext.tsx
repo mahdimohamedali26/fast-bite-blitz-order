@@ -6,6 +6,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  size?: string;
   customizations: {
     size: string;
     addOns: Array<{name: string; price: number}>;
@@ -18,9 +19,10 @@ interface CartItem {
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (item: CartItem) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  removeFromCart: (id: number, size?: string) => void;
+  updateQuantity: (id: number, size: string | undefined, quantity: number) => void;
   clearCart: () => void;
+  getTotalPrice: () => number;
   cartItemsCount: number;
   cartTotal: number;
 }
@@ -46,6 +48,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(cartItem => 
         cartItem.id === item.id && 
+        cartItem.size === item.size &&
         JSON.stringify(cartItem.customizations) === JSON.stringify(item.customizations)
       );
       
@@ -61,17 +64,19 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     });
   };
 
-  const removeFromCart = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  const removeFromCart = (id: number, size?: string) => {
+    setCartItems(prevItems => prevItems.filter(item => 
+      !(item.id === id && item.size === size)
+    ));
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: number, size: string | undefined, quantity: number) => {
     if (quantity === 0) {
-      removeFromCart(id);
+      removeFromCart(id, size);
     } else {
       setCartItems(prevItems =>
         prevItems.map(item =>
-          item.id === id ? { ...item, quantity } : item
+          item.id === id && item.size === size ? { ...item, quantity } : item
         )
       );
     }
@@ -81,12 +86,16 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     setCartItems([]);
   };
 
+  const getTotalPrice = () => {
+    return cartItems.reduce((total, item) => {
+      const addOnsTotal = item.customizations.addOns.reduce((sum, addon) => sum + addon.price, 0);
+      return total + ((item.price + addOnsTotal) * item.quantity);
+    }, 0);
+  };
+
   const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
   
-  const cartTotal = cartItems.reduce((total, item) => {
-    const addOnsTotal = item.customizations.addOns.reduce((sum, addon) => sum + addon.price, 0);
-    return total + ((item.price + addOnsTotal) * item.quantity);
-  }, 0);
+  const cartTotal = getTotalPrice();
 
   const value = {
     cartItems,
@@ -94,6 +103,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     removeFromCart,
     updateQuantity,
     clearCart,
+    getTotalPrice,
     cartItemsCount,
     cartTotal
   };
