@@ -552,12 +552,12 @@ const Menu = () => {
     image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
     orders: 1234
   }];
-  return <div className="min-h-screen bg-gray-50 overflow-x-hidden py-0 my-0 mx-0">
+  return <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
       
       {/* Page Header */}
       <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-6 sm:py-8 mt-14 md:mt-16 lg:mt-19 md:py-0 my-0">
-        <div className="container mx-auto text-center px-0">
+        <div className="container mx-auto text-center px-0 py-[41px]">
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-arial-black mb-4">
             Our Complete <span className="text-brand-yellow">Menu</span>
           </h1>
