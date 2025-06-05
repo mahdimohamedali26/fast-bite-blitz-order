@@ -1,17 +1,11 @@
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
 const HeroSection = () => {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=2072&q=80')`
-        }}
-      >
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
+      backgroundImage: `url('https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=2072&q=80')`
+    }}>
         <div className="absolute inset-0 bg-gradient-to-r from-brand-red/90 to-brand-orange/80"></div>
       </div>
 
@@ -24,7 +18,7 @@ const HeroSection = () => {
           </Badge>
 
           {/* Main Headline */}
-          <h1 className="text-5xl md:text-7xl font-arial-black mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-arial-black mb-6 leading-tight text-slate-950">
             The Most <span className="text-brand-yellow">Delicious</span> Fast Food in Town!
           </h1>
 
@@ -43,11 +37,7 @@ const HeroSection = () => {
           {/* Featured Dish */}
           <div className="flex justify-center mb-8">
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-                alt="Signature Burger"
-                className="w-64 h-64 md:w-80 md:h-80 object-cover rounded-full border-8 border-brand-yellow shadow-2xl animate-pulse-scale"
-              />
+              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Signature Burger" className="w-64 h-64 md:w-80 md:h-80 object-cover rounded-full border-8 border-brand-yellow shadow-2xl animate-pulse-scale" />
               <Badge className="absolute -top-4 -right-4 bg-brand-red text-white font-bold text-lg px-4 py-2 rotate-12">
                 Most Popular!
               </Badge>
@@ -56,10 +46,7 @@ const HeroSection = () => {
 
           {/* Call to Action */}
           <div className="space-y-4">
-            <Button 
-              size="lg" 
-              className="bg-brand-red hover:bg-brand-red/90 text-white font-montserrat-bold text-xl px-12 py-6 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse-scale"
-            >
+            <Button size="lg" className="bg-brand-red hover:bg-brand-red/90 text-white font-montserrat-bold text-xl px-12 py-6 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse-scale">
               🍔 Order Now & Enjoy! 🚚
             </Button>
             
@@ -93,10 +80,12 @@ const HeroSection = () => {
 
       {/* Floating Elements */}
       <div className="absolute top-20 left-10 text-6xl animate-bounce">🍟</div>
-      <div className="absolute top-40 right-20 text-6xl animate-bounce" style={{ animationDelay: '0.5s' }}>🍕</div>
-      <div className="absolute bottom-20 left-20 text-6xl animate-bounce" style={{ animationDelay: '1s' }}>🥤</div>
-    </section>
-  );
+      <div className="absolute top-40 right-20 text-6xl animate-bounce" style={{
+      animationDelay: '0.5s'
+    }}>🍕</div>
+      <div className="absolute bottom-20 left-20 text-6xl animate-bounce" style={{
+      animationDelay: '1s'
+    }}>🥤</div>
+    </section>;
 };
-
 export default HeroSection;
