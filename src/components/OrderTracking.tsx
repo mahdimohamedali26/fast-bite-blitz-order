@@ -43,6 +43,14 @@ const OrderTracking = () => {
     };
   }, [orderTimers, updateOrderStatus]);
 
+  const handleSelectSpecificOrder = (orderId: string) => {
+    setSelectedOrder(orderId);
+  };
+
+  const handleViewAllOrders = () => {
+    setIsDialogOpen(true);
+  };
+
   if (activeOrders.length === 0) return null;
 
   return (
@@ -50,7 +58,8 @@ const OrderTracking = () => {
       <OrderNotificationBell
         activeOrders={activeOrders}
         orderTimers={orderTimers}
-        onViewAllOrders={() => setIsDialogOpen(true)}
+        onViewAllOrders={handleViewAllOrders}
+        onSelectSpecificOrder={handleSelectSpecificOrder}
       />
       
       <OrderDetailsDialog

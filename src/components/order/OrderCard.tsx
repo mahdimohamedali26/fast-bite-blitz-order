@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatTime } from "@/utils/orderUtils";
 import OrderStatusSteps from "./OrderStatusSteps";
+import { Phone, MapPin, Clock } from "lucide-react";
 
 interface Order {
   id: string;
@@ -49,6 +50,23 @@ const OrderCard = ({ order, timeRemaining, onUpdateStatus, onClearOrder }: Order
           </div>
           <div className="text-sm text-gray-600">
             {timeRemaining > 0 ? 'Estimated time remaining' : 'Your order is ready for pickup'}
+          </div>
+        </div>
+
+        {/* Contact Information */}
+        <div className="bg-brand-red/10 p-4 rounded-lg space-y-2">
+          <h4 className="font-semibold text-brand-black mb-2">Restaurant Information</h4>
+          <div className="flex items-center space-x-2 text-sm">
+            <Phone className="w-4 h-4 text-brand-red" />
+            <span>(123) 456-7890</span>
+          </div>
+          <div className="flex items-center space-x-2 text-sm">
+            <MapPin className="w-4 h-4 text-brand-red" />
+            <span>123 Main St, Food District</span>
+          </div>
+          <div className="flex items-center space-x-2 text-sm">
+            <Clock className="w-4 h-4 text-brand-red" />
+            <span>Placed at {order.placedAt.toLocaleTimeString()}</span>
           </div>
         </div>
 
