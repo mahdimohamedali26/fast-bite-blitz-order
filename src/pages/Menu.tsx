@@ -556,8 +556,8 @@ const Menu = () => {
       <Header />
       
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-6 sm:py-8 md:py-12 mt-14 md:mt-16 lg:mt-19">
-        <div className="container mx-auto px-4 text-center">
+      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-6 sm:py-8 mt-14 md:mt-16 lg:mt-19 md:py-0 my-0">
+        <div className="container mx-auto text-center px-0">
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-arial-black mb-4">
             Our Complete <span className="text-brand-yellow">Menu</span>
           </h1>
