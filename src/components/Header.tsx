@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,27 +11,22 @@ import { useAuth } from "@/contexts/AuthContext";
 import OrderSystem from "@/components/OrderSystem";
 import AuthModal from "@/components/AuthModal";
 import OrderTracking from "@/components/OrderTracking";
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isOrderOpen, setIsOrderOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const {
-    cartItemsCount
-  } = useCart();
-  const {
-    favorites
-  } = useFavorites();
-  const {
-    user,
-    isLoggedIn,
-    logout
-  } = useAuth();
-  return <>
+  const { cartItemsCount } = useCart();
+  const { favorites } = useFavorites();
+  const { user, isLoggedIn, logout } = useAuth();
+
+  return (
+    <>
       <header className="bg-white shadow-lg">
         {/* Top Row: Logo, Search, Actions - STICKY */}
         <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
-          <div className="px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py- mx-2 sm:mx-4 lg:mx-6 my-2 sm:my-3 lg:my-4 rounded-xl">
-            <div className="mx-2 sm:mx-4 lg:mx-6 my-2 sm:my-3 lg:my-4\npx-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between h-14 md:h-16">
               {/* Logo */}
               <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
                 <div className="text-xl md:text-2xl font-arial-black text-brand-red">FastBite</div>
@@ -41,7 +37,10 @@ const Header = () => {
               <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
                 <div className="relative w-full">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <Input placeholder="Search delicious food..." className="pl-10 border-2 border-brand-yellow focus:border-brand-red w-full" />
+                  <Input 
+                    placeholder="Search delicious food..." 
+                    className="pl-10 border-2 border-brand-yellow focus:border-brand-red w-full"
+                  />
                 </div>
               </div>
 
@@ -53,7 +52,10 @@ const Header = () => {
                 </Badge>
 
                 {/* Phone - Hidden on mobile */}
-                <a href="tel:+1234567890" className="hidden md:flex items-center text-brand-black hover:text-brand-red font-roboto-bold">
+                <a 
+                  href="tel:+1234567890" 
+                  className="hidden md:flex items-center text-brand-black hover:text-brand-red font-roboto-bold"
+                >
                   <Phone className="w-4 h-4 mr-1" />
                   <span className="text-sm">(123) 456-7890</span>
                 </a>
@@ -65,36 +67,64 @@ const Header = () => {
                 <Link to="/favorites">
                   <Button variant="outline" size="sm" className="relative p-2">
                     <Heart className="w-4 h-4" />
-                    {favorites.length > 0 && <Badge className="absolute -top-1 -right-1 bg-brand-red text-white text-xs w-4 h-4 rounded-full p-0 flex items-center justify-center">
+                    {favorites.length > 0 && (
+                      <Badge className="absolute -top-1 -right-1 bg-brand-red text-white text-xs w-4 h-4 rounded-full p-0 flex items-center justify-center">
                         {favorites.length}
-                      </Badge>}
+                      </Badge>
+                    )}
                   </Button>
                 </Link>
 
                 {/* Cart */}
-                <Button variant="outline" size="sm" className="relative p-2" onClick={() => setIsOrderOpen(true)}>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="relative p-2"
+                  onClick={() => setIsOrderOpen(true)}
+                >
                   <ShoppingCart className="w-4 h-4" />
-                  {cartItemsCount > 0 && <Badge className="absolute -top-1 -right-1 bg-brand-red text-white text-xs w-4 h-4 rounded-full p-0 flex items-center justify-center">
+                  {cartItemsCount > 0 && (
+                    <Badge className="absolute -top-1 -right-1 bg-brand-red text-white text-xs w-4 h-4 rounded-full p-0 flex items-center justify-center">
                       {cartItemsCount}
-                    </Badge>}
+                    </Badge>
+                  )}
                 </Button>
 
                 {/* Auth */}
-                {isLoggedIn ? <div className="flex items-center space-x-2">
+                {isLoggedIn ? (
+                  <div className="flex items-center space-x-2">
                     <span className="hidden md:block text-sm font-medium text-brand-black">
                       Hi, {user?.firstName}!
                     </span>
-                    <Button variant="outline" size="sm" className="p-2" onClick={logout}>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="p-2"
+                      onClick={logout}
+                    >
                       <User className="w-4 h-4" />
                       <span className="hidden md:inline ml-1 text-sm">Logout</span>
                     </Button>
-                  </div> : <Button variant="outline" size="sm" className="p-2" onClick={() => setIsAuthOpen(true)}>
+                  </div>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="p-2"
+                    onClick={() => setIsAuthOpen(true)}
+                  >
                     <User className="w-4 h-4" />
                     <span className="hidden md:inline ml-1 text-sm">Login</span>
-                  </Button>}
+                  </Button>
+                )}
 
                 {/* Mobile Menu Toggle */}
-                <Button variant="outline" size="sm" className="lg:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="lg:hidden p-2"
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
                   {isMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
                 </Button>
               </div>
@@ -104,29 +134,53 @@ const Header = () => {
             <div className="md:hidden pb-3">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input placeholder="Search food..." className="pl-10 border-2 border-brand-yellow focus:border-brand-red w-full" />
+                <Input 
+                  placeholder="Search food..." 
+                  className="pl-10 border-2 border-brand-yellow focus:border-brand-red w-full"
+                />
               </div>
             </div>
 
             {/* Mobile Navigation */}
-            {isMenuOpen && <nav className="lg:hidden pb-3 space-y-1 border-t border-gray-100 pt-3">
-                <Link to="/" className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm" onClick={() => setIsMenuOpen(false)}>
+            {isMenuOpen && (
+              <nav className="lg:hidden pb-3 space-y-1 border-t border-gray-100 pt-3">
+                <Link 
+                  to="/" 
+                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   Home
                 </Link>
-                <Link to="/menu" className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm" onClick={() => setIsMenuOpen(false)}>
+                <Link 
+                  to="/menu" 
+                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   Menu
                 </Link>
-                <Link to="/about" className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm" onClick={() => setIsMenuOpen(false)}>
+                <Link 
+                  to="/about" 
+                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   About
                 </Link>
-                <Link to="/contact" className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm" onClick={() => setIsMenuOpen(false)}>
+                <Link 
+                  to="/contact" 
+                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   Contact
                 </Link>
-                <a href="tel:+1234567890" className="flex items-center text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm">
+                <a 
+                  href="tel:+1234567890" 
+                  className="flex items-center text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
+                >
                   <Phone className="w-4 h-4 mr-2" />
                   Call: (123) 456-7890
                 </a>
-              </nav>}
+              </nav>
+            )}
           </div>
         </div>
 
@@ -153,6 +207,8 @@ const Header = () => {
 
       <OrderSystem isOpen={isOrderOpen} onClose={() => setIsOrderOpen(false)} />
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
-    </>;
+    </>
+  );
 };
+
 export default Header;
