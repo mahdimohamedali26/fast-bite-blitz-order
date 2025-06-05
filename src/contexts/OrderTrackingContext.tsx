@@ -15,16 +15,18 @@ interface Order {
 }
 
 interface OrderTrackingContextType {
-  currentOrder: Order | null;
+  orders: Order[];
+  activeOrders: Order[];
   createOrder: (items: any[], total: number) => void;
-  updateOrderStatus: (status: Order['status']) => void;
-  clearOrder: () => void;
+  updateOrderStatus: (orderId: string, status: Order['status']) => void;
+  clearOrder: (orderId: string) => void;
+  clearAllOrders: () => void;
 }
 
 const OrderTrackingContext = createContext<OrderTrackingContextType | undefined>(undefined);
 
 export const OrderTrackingProvider = ({ children }: { children: ReactNode }) => {
-  const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const createOrder = (items: any[], total: number) => {
     const newOrder: Order = {
@@ -39,25 +41,33 @@ export const OrderTrackingProvider = ({ children }: { children: ReactNode }) => 
       estimatedTime: 25,
       placedAt: new Date()
     };
-    setCurrentOrder(newOrder);
+    setOrders(prev => [...prev, newOrder]);
   };
 
-  const updateOrderStatus = (status: Order['status']) => {
-    if (currentOrder) {
-      setCurrentOrder(prev => prev ? { ...prev, status } : null);
-    }
+  const updateOrderStatus = (orderId: string, status: Order['status']) => {
+    setOrders(prev => prev.map(order => 
+      order.id === orderId ? { ...order, status } : order
+    ));
   };
 
-  const clearOrder = () => {
-    setCurrentOrder(null);
+  const clearOrder = (orderId: string) => {
+    setOrders(prev => prev.filter(order => order.id !== orderId));
   };
+
+  const clearAllOrders = () => {
+    setOrders([]);
+  };
+
+  const activeOrders = orders.filter(order => order.status !== 'delivered');
 
   return (
     <OrderTrackingContext.Provider value={{
-      currentOrder,
+      orders,
+      activeOrders,
       createOrder,
       updateOrderStatus,
-      clearOrder
+      clearOrder,
+      clearAllOrders
     }}>
       {children}
     </OrderTrackingContext.Provider>

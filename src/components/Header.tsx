@@ -22,7 +22,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-white shadow-lg sticky top-0 z-50 w-full overflow-x-hidden">
+      <header className="bg-white shadow-lg fixed top-0 left-0 right-0 z-50 w-full">
         <div className="container mx-auto px-4">
           {/* Top Row: Logo, Search, Actions */}
           <div className="flex items-center justify-between h-16 md:h-20">

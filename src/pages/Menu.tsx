@@ -84,7 +84,7 @@ const Menu = () => {
       name: "BBQ Bacon Burger",
       category: "burgers",
       price: 14.99,
-      image: "https://images.unsplash.com/photo-1553979459-d2229ba7433a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       rating: 4.8,
       orders: 1923,
       isBestSeller: true,
@@ -206,7 +206,7 @@ const Menu = () => {
       name: "Strawberry Milkshake",
       category: "drinks",
       price: 4.99,
-      image: "https://images.unsplash.com/photo-1541544181051-e46607aa95c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      image: "https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       rating: 4.8,
       orders: 1847,
       isBestSeller: false,
@@ -409,7 +409,7 @@ const Menu = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden pt-20 md:pt-28">
       <Header />
       
       {/* Page Header */}

@@ -5,35 +5,48 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, Package, Truck, CheckCircle, Bell } from "lucide-react";
 import { useOrderTracking } from "@/contexts/OrderTrackingContext";
 
 const OrderTracking = () => {
-  const { currentOrder, updateOrderStatus, clearOrder } = useOrderTracking();
+  const { activeOrders, updateOrderStatus, clearOrder } = useOrderTracking();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(0);
+  const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+  const [orderTimers, setOrderTimers] = useState<{[key: string]: number}>({});
 
   useEffect(() => {
-    if (currentOrder) {
-      setTimeRemaining(currentOrder.estimatedTime * 60); // Convert to seconds
-      setIsDialogOpen(true);
-    }
-  }, [currentOrder]);
+    activeOrders.forEach(order => {
+      if (!orderTimers[order.id]) {
+        setOrderTimers(prev => ({
+          ...prev,
+          [order.id]: order.estimatedTime * 60
+        }));
+      }
+    });
+  }, [activeOrders]);
 
   useEffect(() => {
-    if (timeRemaining > 0) {
-      const timer = setInterval(() => {
-        setTimeRemaining(prev => {
-          if (prev <= 1) {
-            updateOrderStatus('ready');
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [timeRemaining, updateOrderStatus]);
+    const timers = Object.keys(orderTimers).map(orderId => {
+      if (orderTimers[orderId] > 0) {
+        return setInterval(() => {
+          setOrderTimers(prev => {
+            const newTime = prev[orderId] - 1;
+            if (newTime <= 0) {
+              updateOrderStatus(orderId, 'ready');
+              return { ...prev, [orderId]: 0 };
+            }
+            return { ...prev, [orderId]: newTime };
+          });
+        }, 1000);
+      }
+      return null;
+    }).filter(Boolean);
+
+    return () => {
+      timers.forEach(timer => timer && clearInterval(timer));
+    };
+  }, [orderTimers, updateOrderStatus]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -61,7 +74,9 @@ const OrderTracking = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  if (!currentOrder) return null;
+  if (activeOrders.length === 0) return null;
+
+  const currentOrder = selectedOrder ? activeOrders.find(o => o.id === selectedOrder) : activeOrders[0];
 
   return (
     <>
@@ -71,30 +86,38 @@ const OrderTracking = () => {
           <Button variant="outline" size="sm" className="relative">
             <Bell className="w-4 h-4" />
             <Badge className="absolute -top-2 -right-2 bg-brand-red text-white text-xs w-5 h-5 rounded-full p-0 flex items-center justify-center">
-              1
+              {activeOrders.length}
             </Badge>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80 bg-white border-2 border-brand-yellow z-50">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="font-semibold text-brand-black">Order Status</h4>
-              <Badge className={`${getStatusColor(currentOrder.status)} text-white`}>
-                {currentOrder.status.toUpperCase()}
+              <h4 className="font-semibold text-brand-black">Active Orders</h4>
+              <Badge className="bg-brand-red text-white">
+                {activeOrders.length} Active
               </Badge>
             </div>
-            <div className="flex items-center space-x-2">
-              {getStatusIcon(currentOrder.status)}
-              <span className="text-sm text-gray-600">Order #{currentOrder.id}</span>
-            </div>
-            <div className="text-lg font-bold text-brand-red">
-              {timeRemaining > 0 ? `${formatTime(timeRemaining)} remaining` : 'Ready for pickup!'}
-            </div>
+            
+            {activeOrders.slice(0, 3).map((order) => (
+              <div key={order.id} className="p-2 border rounded-lg">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium">#{order.id}</span>
+                  <Badge className={`${getStatusColor(order.status)} text-white text-xs`}>
+                    {order.status.toUpperCase()}
+                  </Badge>
+                </div>
+                <div className="text-sm text-brand-red font-bold">
+                  {orderTimers[order.id] > 0 ? `${formatTime(orderTimers[order.id])} remaining` : 'Ready!'}
+                </div>
+              </div>
+            ))}
+            
             <Button 
               onClick={() => setIsDialogOpen(true)}
               className="w-full bg-brand-red hover:bg-brand-red/90"
             >
-              View Details
+              View All Orders
             </Button>
           </div>
         </PopoverContent>
@@ -102,95 +125,106 @@ const OrderTracking = () => {
 
       {/* Order Details Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-brand-black">
-              Order Tracking
+              Order Tracking - {activeOrders.length} Active Orders
             </DialogTitle>
           </DialogHeader>
           
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>Order #{currentOrder.id}</span>
-                <Badge className={`${getStatusColor(currentOrder.status)} text-white`}>
-                  {currentOrder.status.toUpperCase()}
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Progress Steps */}
-              <div className="space-y-3">
-                {['preparing', 'cooking', 'ready', 'delivered'].map((step, index) => (
-                  <div key={step} className="flex items-center space-x-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      currentOrder.status === step || 
-                      (['cooking', 'ready', 'delivered'].includes(currentOrder.status) && step === 'preparing') ||
-                      (['ready', 'delivered'].includes(currentOrder.status) && step === 'cooking') ||
-                      (currentOrder.status === 'delivered' && step === 'ready')
-                        ? getStatusColor(step) + ' text-white'
-                        : 'bg-gray-200 text-gray-500'
-                    }`}>
-                      {getStatusIcon(step)}
+          <Tabs value={selectedOrder || activeOrders[0]?.id} onValueChange={setSelectedOrder}>
+            <TabsList className="grid w-full grid-cols-auto overflow-x-auto">
+              {activeOrders.map((order) => (
+                <TabsTrigger key={order.id} value={order.id} className="text-xs">
+                  #{order.id.slice(-4)}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            
+            {activeOrders.map((order) => (
+              <TabsContent key={order.id} value={order.id}>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <span>Order #{order.id}</span>
+                      <Badge className={`${getStatusColor(order.status)} text-white`}>
+                        {order.status.toUpperCase()}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {/* Progress Steps */}
+                    <div className="space-y-3">
+                      {['preparing', 'cooking', 'ready', 'delivered'].map((step, index) => (
+                        <div key={step} className="flex items-center space-x-3">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                            order.status === step || 
+                            (['cooking', 'ready', 'delivered'].includes(order.status) && step === 'preparing') ||
+                            (['ready', 'delivered'].includes(order.status) && step === 'cooking') ||
+                            (order.status === 'delivered' && step === 'ready')
+                              ? getStatusColor(step) + ' text-white'
+                              : 'bg-gray-200 text-gray-500'
+                          }`}>
+                            {getStatusIcon(step)}
+                          </div>
+                          <span className={`capitalize ${
+                            order.status === step ? 'font-bold text-brand-black' : 'text-gray-600'
+                          }`}>
+                            {step}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                    <span className={`capitalize ${
-                      currentOrder.status === step ? 'font-bold text-brand-black' : 'text-gray-600'
-                    }`}>
-                      {step}
-                    </span>
-                  </div>
-                ))}
-              </div>
 
-              {/* Time Remaining */}
-              <div className="bg-brand-yellow/10 p-4 rounded-lg text-center">
-                <div className="text-2xl font-bold text-brand-red">
-                  {timeRemaining > 0 ? formatTime(timeRemaining) : '🎉 Ready!'}
-                </div>
-                <div className="text-sm text-gray-600">
-                  {timeRemaining > 0 ? 'Estimated time remaining' : 'Your order is ready for pickup'}
-                </div>
-              </div>
+                    {/* Time Remaining */}
+                    <div className="bg-brand-yellow/10 p-4 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-brand-red">
+                        {orderTimers[order.id] > 0 ? formatTime(orderTimers[order.id]) : '🎉 Ready!'}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {orderTimers[order.id] > 0 ? 'Estimated time remaining' : 'Your order is ready for pickup'}
+                      </div>
+                    </div>
 
-              {/* Order Items */}
-              <div className="space-y-2">
-                <h4 className="font-semibold text-brand-black">Order Items:</h4>
-                {currentOrder.items.map((item, index) => (
-                  <div key={index} className="flex justify-between text-sm">
-                    <span>{item.quantity}x {item.name}</span>
-                    <span>${item.price.toFixed(2)}</span>
-                  </div>
-                ))}
-                <div className="border-t pt-2 flex justify-between font-bold">
-                  <span>Total:</span>
-                  <span>${currentOrder.total.toFixed(2)}</span>
-                </div>
-              </div>
+                    {/* Order Items */}
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-brand-black">Order Items:</h4>
+                      {order.items.map((item, index) => (
+                        <div key={index} className="flex justify-between text-sm">
+                          <span>{item.quantity}x {item.name}</span>
+                          <span>${item.price.toFixed(2)}</span>
+                        </div>
+                      ))}
+                      <div className="border-t pt-2 flex justify-between font-bold">
+                        <span>Total:</span>
+                        <span>${order.total.toFixed(2)}</span>
+                      </div>
+                    </div>
 
-              {/* Actions */}
-              <div className="space-y-2">
-                {currentOrder.status === 'ready' && (
-                  <Button 
-                    onClick={() => updateOrderStatus('delivered')}
-                    className="w-full bg-green-500 hover:bg-green-600"
-                  >
-                    Mark as Picked Up
-                  </Button>
-                )}
-                {currentOrder.status === 'delivered' && (
-                  <Button 
-                    onClick={() => {
-                      clearOrder();
-                      setIsDialogOpen(false);
-                    }}
-                    className="w-full bg-brand-red hover:bg-brand-red/90"
-                  >
-                    Close Order
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                    {/* Actions */}
+                    <div className="space-y-2">
+                      {order.status === 'ready' && (
+                        <Button 
+                          onClick={() => updateOrderStatus(order.id, 'delivered')}
+                          className="w-full bg-green-500 hover:bg-green-600"
+                        >
+                          Mark as Picked Up
+                        </Button>
+                      )}
+                      {order.status === 'delivered' && (
+                        <Button 
+                          onClick={() => clearOrder(order.id)}
+                          className="w-full bg-brand-red hover:bg-brand-red/90"
+                        >
+                          Close Order
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            ))}
+          </Tabs>
         </DialogContent>
       </Dialog>
     </>
