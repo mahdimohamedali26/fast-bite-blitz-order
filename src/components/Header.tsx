@@ -32,7 +32,7 @@ const Header = () => {
           <div className="px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py- mx-2 sm:mx-4 lg:mx-6 my-2 sm:my-3 lg:my-4 rounded-xl">
             <div className="mx-2 sm:mx-4 lg:mx-6 my-2 sm:my-3 lg:my-4\npx-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-">
               {/* Logo */}
-              <Link to="/" className="mx-2 sm:mx-4 lg:mx-6 my-2 sm:my-3 lg:my-4 px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4">
+              <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
                 <div className="text-xl md:text-2xl font-arial-black text-brand-red">FastBite</div>
                 <div className="text-lg">🍔</div>
               </Link>
