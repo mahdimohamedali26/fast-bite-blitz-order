@@ -657,7 +657,7 @@ const Menu = () => {
                         <h3 className="text-base md:text-lg font-montserrat-bold text-brand-black">{item.name}</h3>
                         <div className="flex items-center">
                           <Star className="w-3 h-3 md:w-4 md:h-4 text-brand-yellow fill-current" />
-                          <span className="text-xs md:text-sm font-bold ml-1">{item.rating}</span>
+                          <span className="text-xs md:text-sm font-bold ml-1 mx-0 py-[59px] px-0">{item.rating}</span>
                         </div>
                       </div>
                       
@@ -698,13 +698,13 @@ const Menu = () => {
                   <div className="relative">
                     <img src={offer.image} alt={offer.title} className="w-full h-24 md:h-32 object-cover opacity-30" />
                     <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-center">
-                      <Badge className="bg-brand-yellow text-brand-black font-bold w-fit mb-2 text-xs rounded-sm py-0 my-0">
+                      <Badge className="bg-brand-yellow text-brand-black font-bold w-fit mb-2 text-xs">
                         <Clock className="w-3 h-3 md:w-4 md:h-4 mr-1" />
                         {offer.validUntil}
                       </Badge>
                       <h3 className="text-lg md:text-xl font-montserrat-bold mb-1">{offer.title}</h3>
                       <p className="text-xs md:text-sm mb-2">{offer.subtitle}</p>
-                      <div className="text-xl md:text-2xl font-arial-black text-brand-yellow my-0 py-0">{offer.discount}</div>
+                      <div className="text-xl md:text-2xl font-arial-black text-brand-yellow">{offer.discount}</div>
                     </div>
                   </div>
                 </CardContent>
