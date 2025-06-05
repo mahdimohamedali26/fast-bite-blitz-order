@@ -657,7 +657,7 @@ const Menu = () => {
                         <h3 className="text-base md:text-lg font-montserrat-bold text-brand-black">{item.name}</h3>
                         <div className="flex items-center">
                           <Star className="w-3 h-3 md:w-4 md:h-4 text-brand-yellow fill-current" />
-                          <span className="text-xs md:text-sm font-bold ml-1 mx-0 py-[59px] px-0">{item.rating}</span>
+                          <span className="text-xs md:text-sm font-bold ml-1 px-0 mx-0 my-[73px] py-[34px]">{item.rating}</span>
                         </div>
                       </div>
                       
