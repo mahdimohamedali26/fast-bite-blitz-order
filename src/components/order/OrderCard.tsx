@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatTime } from "@/utils/orderUtils";
 import OrderStatusSteps from "./OrderStatusSteps";
-import { Phone, MapPin, Clock } from "lucide-react";
+import { Phone, MapPin, Clock, User } from "lucide-react";
 
 interface Order {
   id: string;
@@ -53,7 +53,27 @@ const OrderCard = ({ order, timeRemaining, onUpdateStatus, onClearOrder }: Order
           </div>
         </div>
 
-        {/* Contact Information */}
+        {/* Customer Information */}
+        <div className="bg-brand-blue/10 p-4 rounded-lg space-y-2">
+          <h4 className="font-semibold text-brand-black mb-2 flex items-center">
+            <User className="w-4 h-4 text-brand-red mr-2" />
+            Customer Information
+          </h4>
+          <div className="flex items-center space-x-2 text-sm">
+            <User className="w-4 h-4 text-brand-red" />
+            <span>John Doe</span>
+          </div>
+          <div className="flex items-center space-x-2 text-sm">
+            <Phone className="w-4 h-4 text-brand-red" />
+            <span>(555) 123-4567</span>
+          </div>
+          <div className="flex items-center space-x-2 text-sm">
+            <MapPin className="w-4 h-4 text-brand-red" />
+            <span>123 Main St, Delivery Address</span>
+          </div>
+        </div>
+
+        {/* Restaurant Information */}
         <div className="bg-brand-red/10 p-4 rounded-lg space-y-2">
           <h4 className="font-semibold text-brand-black mb-2">Restaurant Information</h4>
           <div className="flex items-center space-x-2 text-sm">
