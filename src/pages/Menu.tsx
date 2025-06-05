@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -413,7 +414,7 @@ const Menu = () => {
       <Header />
       
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-8 sm:py-12 md:py-16 mt-16 md:mt-20">
+      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-6 sm:py-8 md:py-12 mt-14 md:mt-16 lg:mt-19">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-arial-black mb-4">
             Our Complete <span className="text-brand-yellow">Menu</span>

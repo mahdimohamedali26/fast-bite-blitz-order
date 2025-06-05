@@ -26,11 +26,11 @@ const Header = () => {
         {/* Top Row: Logo, Search, Actions - STICKY */}
         <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between h-16 md:h-20">
+            <div className="flex items-center justify-between h-14 md:h-16">
               {/* Logo */}
               <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
-                <div className="text-2xl md:text-3xl font-arial-black text-brand-red">FastBite</div>
-                <div className="text-xl">🍔</div>
+                <div className="text-xl md:text-2xl font-arial-black text-brand-red">FastBite</div>
+                <div className="text-lg">🍔</div>
               </Link>
 
               {/* Search Bar - Center */}
@@ -45,9 +45,9 @@ const Header = () => {
               </div>
 
               {/* Right Section - Actions */}
-              <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
+              <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
                 {/* Delivery Badge - Hidden on mobile */}
-                <Badge className="hidden lg:flex bg-brand-yellow text-brand-black font-bold px-3 py-1">
+                <Badge className="hidden lg:flex bg-brand-yellow text-brand-black font-bold px-2 py-1 text-xs">
                   🚚 30 Min Delivery
                 </Badge>
 
@@ -65,10 +65,10 @@ const Header = () => {
 
                 {/* Favorites */}
                 <Link to="/favorites">
-                  <Button variant="outline" size="sm" className="relative">
+                  <Button variant="outline" size="sm" className="relative p-2">
                     <Heart className="w-4 h-4" />
                     {favorites.length > 0 && (
-                      <Badge className="absolute -top-2 -right-2 bg-brand-red text-white text-xs w-5 h-5 rounded-full p-0 flex items-center justify-center">
+                      <Badge className="absolute -top-1 -right-1 bg-brand-red text-white text-xs w-4 h-4 rounded-full p-0 flex items-center justify-center">
                         {favorites.length}
                       </Badge>
                     )}
@@ -79,12 +79,12 @@ const Header = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="relative"
+                  className="relative p-2"
                   onClick={() => setIsOrderOpen(true)}
                 >
                   <ShoppingCart className="w-4 h-4" />
                   {cartItemsCount > 0 && (
-                    <Badge className="absolute -top-2 -right-2 bg-brand-red text-white text-xs w-5 h-5 rounded-full p-0 flex items-center justify-center">
+                    <Badge className="absolute -top-1 -right-1 bg-brand-red text-white text-xs w-4 h-4 rounded-full p-0 flex items-center justify-center">
                       {cartItemsCount}
                     </Badge>
                   )}
@@ -99,20 +99,22 @@ const Header = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
+                      className="p-2"
                       onClick={logout}
                     >
                       <User className="w-4 h-4" />
-                      <span className="hidden md:inline ml-1">Logout</span>
+                      <span className="hidden md:inline ml-1 text-sm">Logout</span>
                     </Button>
                   </div>
                 ) : (
                   <Button 
                     variant="outline" 
                     size="sm"
+                    className="p-2"
                     onClick={() => setIsAuthOpen(true)}
                   >
                     <User className="w-4 h-4" />
-                    <span className="hidden md:inline ml-1">Login</span>
+                    <span className="hidden md:inline ml-1 text-sm">Login</span>
                   </Button>
                 )}
 
@@ -120,7 +122,7 @@ const Header = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="lg:hidden"
+                  className="lg:hidden p-2"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                   {isMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -129,7 +131,7 @@ const Header = () => {
             </div>
 
             {/* Mobile Search */}
-            <div className="md:hidden pb-4">
+            <div className="md:hidden pb-3">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input 
@@ -141,38 +143,38 @@ const Header = () => {
 
             {/* Mobile Navigation */}
             {isMenuOpen && (
-              <nav className="lg:hidden pb-4 space-y-2 border-t border-gray-100 pt-4">
+              <nav className="lg:hidden pb-3 space-y-1 border-t border-gray-100 pt-3">
                 <Link 
                   to="/" 
-                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
+                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Home
                 </Link>
                 <Link 
                   to="/menu" 
-                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
+                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Menu
                 </Link>
                 <Link 
                   to="/about" 
-                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
+                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   About
                 </Link>
                 <Link 
                   to="/contact" 
-                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2"
+                  className="block text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Contact
                 </Link>
                 <a 
                   href="tel:+1234567890" 
-                  className="flex items-center text-brand-black hover:text-brand-red font-roboto-bold py-2"
+                  className="flex items-center text-brand-black hover:text-brand-red font-roboto-bold py-2 text-sm"
                 >
                   <Phone className="w-4 h-4 mr-2" />
                   Call: (123) 456-7890
@@ -183,19 +185,19 @@ const Header = () => {
         </div>
 
         {/* Navigation Menu - NOT STICKY, below the fixed header */}
-        <div className="mt-16 md:mt-20">
-          <div className="hidden lg:flex items-center justify-center py-4 border-t border-gray-100 bg-white">
-            <nav className="flex items-center space-x-12">
-              <Link to="/" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+        <div className="mt-14 md:mt-16">
+          <div className="hidden lg:flex items-center justify-center py-3 border-t border-gray-100 bg-white">
+            <nav className="flex items-center space-x-8">
+              <Link to="/" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
                 Home
               </Link>
-              <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+              <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
                 Menu
               </Link>
-              <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+              <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
                 About
               </Link>
-              <Link to="/contact" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-lg">
+              <Link to="/contact" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
                 Contact
               </Link>
             </nav>
