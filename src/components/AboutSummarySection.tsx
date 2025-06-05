@@ -1,62 +1,47 @@
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Award, Users, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-
 const AboutSummarySection = () => {
-  const stats = [
-    {
-      icon: Users,
-      number: "50,000+",
-      label: "Happy Customers Served",
-      color: "text-brand-red"
-    },
-    {
-      icon: Clock,
-      number: "15+",
-      label: "Years in Business",
-      color: "text-brand-orange"
-    },
-    {
-      icon: Award,
-      number: "4.9★",
-      label: "Customer Satisfaction",
-      color: "text-brand-yellow"
-    },
-    {
-      icon: Heart,
-      number: "99%",
-      label: "Would Recommend",
-      color: "text-brand-red"
-    }
-  ];
-
-  const features = [
-    {
-      title: "Farm-Fresh Ingredients",
-      description: "We source only the finest, freshest ingredients from local farms",
-      icon: "🌱"
-    },
-    {
-      title: "Secret Family Recipes",
-      description: "Passed down through generations, our recipes are truly unique",
-      icon: "👨‍🍳"
-    },
-    {
-      title: "Lightning Fast Service",
-      description: "30-minute delivery guarantee or your money back",
-      icon: "⚡"
-    },
-    {
-      title: "Quality You Can Taste",
-      description: "Every meal is prepared with love and attention to detail",
-      icon: "❤️"
-    }
-  ];
-
-  return (
-    <section className="py-16 bg-white">
+  const stats = [{
+    icon: Users,
+    number: "50,000+",
+    label: "Happy Customers Served",
+    color: "text-brand-red"
+  }, {
+    icon: Clock,
+    number: "15+",
+    label: "Years in Business",
+    color: "text-brand-orange"
+  }, {
+    icon: Award,
+    number: "4.9★",
+    label: "Customer Satisfaction",
+    color: "text-brand-yellow"
+  }, {
+    icon: Heart,
+    number: "99%",
+    label: "Would Recommend",
+    color: "text-brand-red"
+  }];
+  const features = [{
+    title: "Farm-Fresh Ingredients",
+    description: "We source only the finest, freshest ingredients from local farms",
+    icon: "🌱"
+  }, {
+    title: "Secret Family Recipes",
+    description: "Passed down through generations, our recipes are truly unique",
+    icon: "👨‍🍳"
+  }, {
+    title: "Lightning Fast Service",
+    description: "30-minute delivery guarantee or your money back",
+    icon: "⚡"
+  }, {
+    title: "Quality You Can Taste",
+    description: "Every meal is prepared with love and attention to detail",
+    icon: "❤️"
+  }];
+  return <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Side - Content */}
@@ -77,15 +62,13 @@ const AboutSummarySection = () => {
 
             {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {features.map((feature, index) => (
-                <div key={index} className="flex items-start space-x-3">
+              {features.map((feature, index) => <div key={index} className="flex items-start space-x-3">
                   <span className="text-2xl">{feature.icon}</span>
                   <div>
                     <h3 className="font-montserrat-bold text-brand-black mb-1">{feature.title}</h3>
                     <p className="text-sm text-gray-600">{feature.description}</p>
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
 
             {/* Quality Commitment */}
@@ -100,10 +83,7 @@ const AboutSummarySection = () => {
 
             {/* CTA Button */}
             <Link to="/about">
-              <Button 
-                size="lg" 
-                className="bg-brand-red hover:bg-brand-red/90 text-white font-montserrat-bold text-lg px-8 py-4 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
-              >
+              <Button size="lg" className="bg-brand-red hover:bg-brand-red/90 text-white font-montserrat-bold text-lg px-8 py-4 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
                 📖 Learn More About Our Story
               </Button>
             </Link>
@@ -113,11 +93,7 @@ const AboutSummarySection = () => {
           <div className="space-y-8">
             {/* Restaurant Image */}
             <div className="relative rounded-xl overflow-hidden shadow-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-                alt="FastBite Restaurant Interior"
-                className="w-full h-64 object-cover"
-              />
+              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="FastBite Restaurant Interior" className="w-full h-64 object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-brand-black/50 to-transparent"></div>
               <Badge className="absolute bottom-4 left-4 bg-brand-red text-white font-bold">
                 Our Modern Kitchen
@@ -126,15 +102,13 @@ const AboutSummarySection = () => {
 
             {/* Statistics Grid */}
             <div className="grid grid-cols-2 gap-6">
-              {stats.map((stat, index) => (
-                <div key={index} className="bg-white border-2 border-gray-100 rounded-xl p-6 text-center hover:border-brand-red transition-all duration-300 hover:shadow-lg">
+              {stats.map((stat, index) => <div key={index} className="bg-white border-2 border-gray-100 rounded-xl p-6 text-center hover:border-brand-red transition-all duration-300 hover:shadow-lg">
                   <stat.icon className={`w-8 h-8 mx-auto mb-3 ${stat.color}`} />
                   <div className={`text-3xl font-arial-black ${stat.color} mb-2`}>
                     {stat.number}
                   </div>
                   <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-                </div>
-              ))}
+                </div>)}
             </div>
 
             {/* Certifications */}
@@ -156,16 +130,9 @@ const AboutSummarySection = () => {
           <p className="text-xl text-gray-600 mb-6">
             Ready to experience the FastBite difference?
           </p>
-          <Button 
-            size="lg" 
-            className="bg-brand-red hover:bg-brand-red/90 text-white font-montserrat-bold text-xl px-12 py-6 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 animate-pulse-scale"
-          >
-            🍔 Experience Our Taste - Order Now!
-          </Button>
+          <Button size="lg" className="bg-brand-red hover:bg-brand-red/90 text-white font-montserrat-bold text-xl rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 animate-pulse-scale py-[12px] px-[32px]">🍔 Experience Our Taste -</Button>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default AboutSummarySection;
