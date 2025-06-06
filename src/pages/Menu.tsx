@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Heart, ShoppingCart, Star, Search, Clock, TrendingUp } from "lucide-react";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useCart } from "@/contexts/CartContext";
+
 const Menu = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
@@ -22,6 +23,7 @@ const Menu = () => {
   const {
     addToCart
   } = useCart();
+
   const categories = [{
     id: "all",
     name: "🍽️ All Items",
@@ -51,6 +53,7 @@ const Menu = () => {
     name: "🍰 Desserts",
     count: 12
   }];
+
   const menuItems = [{
     id: 1,
     name: "FastBite Supreme Burger",
@@ -475,12 +478,14 @@ const Menu = () => {
       price: 1.00
     }]
   }];
+
   const filteredItems = menuItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === "all" || item.category === activeCategory;
     const matchesPrice = item.price <= priceRange[0];
     return matchesSearch && matchesCategory && matchesPrice;
   });
+
   const sortedItems = [...filteredItems].sort((a, b) => {
     switch (sortBy) {
       case "price-low":
@@ -495,6 +500,7 @@ const Menu = () => {
         return b.orders - a.orders;
     }
   });
+
   const handleAddToCart = (item: any) => {
     const cartItem = {
       id: item.id,
@@ -511,6 +517,7 @@ const Menu = () => {
     };
     addToCart(cartItem);
   };
+
   const specialOffers = [{
     id: 1,
     title: "Buy 2 Get 1 FREE",
@@ -533,6 +540,7 @@ const Menu = () => {
     discount: "25% OFF",
     image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
   }];
+
   const bestSellers = [{
     id: 1,
     name: "FastBite Supreme Burger",
@@ -552,12 +560,13 @@ const Menu = () => {
     image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
     orders: 1234
   }];
+
   return <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
       
-      {/* Page Header */}
-      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-6 sm:py-8 mt-14 md:mt-16 lg:mt-19 md:py-0 my-0">
-        <div className="container mx-auto text-center px-0 py-[41px]">
+      {/* Page Header - Remove extra margin/padding */}
+      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white py-6 sm:py-8 mt-14 md:mt-16 lg:mt-[72px]">
+        <div className="container mx-auto text-center px-4 py-8">
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-arial-black mb-4">
             Our Complete <span className="text-brand-yellow">Menu</span>
           </h1>
@@ -778,4 +787,5 @@ const Menu = () => {
       <Footer />
     </div>;
 };
+
 export default Menu;
