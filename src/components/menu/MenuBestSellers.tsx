@@ -60,10 +60,21 @@ const MenuBestSellers = () => {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
         {bestSellers.map((item, index) => 
-          <Card key={item.id} className="bg-white shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300">
+          <Card key={item.id} className="bg-white shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 will-change-transform">
             <CardContent className="p-0">
               <div className="relative">
-                <img src={item.image} alt={item.name} className="w-full h-32 md:h-40 object-cover" />
+                <img 
+                  src={item.image} 
+                  alt={item.name} 
+                  className="w-full h-32 md:h-40 object-cover" 
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop&crop=center";
+                  }}
+                />
                 <Badge className="absolute top-3 left-3 bg-brand-yellow text-brand-black font-bold text-xs">
                   #{index + 1} Best Seller
                 </Badge>
@@ -77,8 +88,9 @@ const MenuBestSellers = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-lg md:text-xl font-arial-black text-brand-red">${item.price}</span>
                   <Button 
-                    className="bg-brand-yellow text-brand-black hover:bg-brand-orange text-xs md:text-sm px-3 md:px-4" 
+                    className="bg-brand-yellow text-brand-black hover:bg-brand-orange text-xs md:text-sm px-3 md:px-4 min-h-[44px] hover:scale-105 transition-all duration-300 will-change-transform" 
                     onClick={() => handleAddToCart(item)}
+                    aria-label={`Quick order ${item.name} for $${item.price}`}
                   >
                     Quick Order
                   </Button>
@@ -88,6 +100,15 @@ const MenuBestSellers = () => {
           </Card>
         )}
       </div>
+      
+      {/* Performance status for best sellers */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mt-6 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+          <p className="text-sm text-purple-700">
+            ✅ Best Sellers optimized with lazy loading and error handling
+          </p>
+        </div>
+      )}
     </div>
   );
 };

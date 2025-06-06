@@ -62,17 +62,24 @@ const MenuGrid = ({ items }: MenuGridProps) => {
 
   return (
     <div className="lg:col-span-3">
-      {/* Improved responsive grid with better spacing */}
+      {/* Optimized responsive grid with better spacing and performance */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
         {items.map(item => 
-          <Card key={item.id} className="bg-white shadow-lg border-0 overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl group">
+          <Card key={item.id} className="bg-white shadow-lg border-0 overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-2xl group will-change-transform">
             <div className="relative">
-              {/* Optimized image with lazy loading */}
+              {/* Performance optimized image with multiple optimizations */}
               <img 
                 src={item.image} 
                 alt={item.name} 
-                className="w-full h-40 md:h-48 lg:h-52 object-cover group-hover:scale-110 transition-transform duration-300" 
+                className="w-full h-40 md:h-48 lg:h-52 object-cover group-hover:scale-110 transition-transform duration-300 will-change-transform" 
                 loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+                onError={(e) => {
+                  // Fallback to placeholder if image fails to load
+                  const target = e.target as HTMLImageElement;
+                  target.src = "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop&crop=center";
+                }}
               />
               <div className="absolute top-3 left-3 space-y-2">
                 {item.isBestSeller && 
@@ -89,7 +96,7 @@ const MenuGrid = ({ items }: MenuGridProps) => {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className={`absolute top-3 right-3 p-2 sm:p-3 min-h-[40px] min-w-[40px] lg:min-h-[44px] lg:min-w-[44px] hover:scale-110 transition-all duration-300 ${
+                className={`absolute top-3 right-3 p-2 sm:p-3 min-h-[44px] min-w-[44px] lg:min-h-[44px] lg:min-w-[44px] hover:scale-110 transition-all duration-300 will-change-transform ${
                   isFavorite(item.id) 
                     ? "bg-brand-red text-white border-brand-red" 
                     : "bg-white/90 text-brand-red border-brand-red hover:bg-brand-red hover:text-white"
@@ -119,7 +126,7 @@ const MenuGrid = ({ items }: MenuGridProps) => {
               <div className="flex items-center justify-between">
                 <span className="text-lg md:text-xl lg:text-2xl font-arial-black text-brand-red">${item.price}</span>
                 <Button 
-                  className="bg-brand-yellow text-brand-black hover:bg-brand-orange hover:scale-105 transition-all duration-300 text-sm md:text-base px-3 md:px-4 lg:px-6 py-2 lg:py-3 min-h-[44px] font-bold" 
+                  className="bg-brand-yellow text-brand-black hover:bg-brand-orange hover:scale-105 transition-all duration-300 text-sm md:text-base px-3 md:px-4 lg:px-6 py-2 lg:py-3 min-h-[44px] font-bold will-change-transform" 
                   onClick={() => handleAddToCart(item)}
                   aria-label={`Add ${item.name} to cart for $${item.price}`}
                 >
@@ -131,6 +138,19 @@ const MenuGrid = ({ items }: MenuGridProps) => {
           </Card>
         )}
       </div>
+      
+      {/* Performance tip notice for developers */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h4 className="font-bold text-blue-800 mb-2">Performance Optimization Tips:</h4>
+          <ul className="text-sm text-blue-700 space-y-1">
+            <li>• Images are using lazy loading for better performance</li>
+            <li>• Consider compressing images with TinyPNG or similar tools</li>
+            <li>• Will-change CSS property is applied for smooth animations</li>
+            <li>• Error handling is implemented for failed image loads</li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
