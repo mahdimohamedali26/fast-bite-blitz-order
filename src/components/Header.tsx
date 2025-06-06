@@ -25,7 +25,7 @@ const Header = () => {
       <header className="bg-white shadow-lg">
         {/* Top Row: Logo, Search, Actions - STICKY */}
         <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
-          <div className="container mx-auto px-4">
+          <div className="mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 max-w-7xl">
             <div className="flex items-center justify-between h-14 md:h-16">
               {/* Logo */}
               <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
@@ -34,7 +34,7 @@ const Header = () => {
               </Link>
 
               {/* Search Bar - Center */}
-              <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
+              <div className="hidden md:flex items-center flex-1 max-w-md mx-4 lg:mx-6">
                 <div className="relative w-full">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input 
@@ -45,7 +45,7 @@ const Header = () => {
               </div>
 
               {/* Right Section - Actions */}
-              <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
+              <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 flex-shrink-0">
                 {/* Delivery Badge - Hidden on mobile */}
                 <Badge className="hidden lg:flex bg-brand-yellow text-brand-black font-bold px-2 py-1 text-xs">
                   🚚 30 Min Delivery
@@ -187,20 +187,22 @@ const Header = () => {
         {/* Navigation Menu - NOT STICKY, below the fixed header */}
         <div className="mt-14 md:mt-16">
           <div className="hidden lg:flex items-center justify-center py-3 border-t border-gray-100 bg-white">
-            <nav className="flex items-center space-x-8">
-              <Link to="/" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
-                Home
-              </Link>
-              <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
-                Menu
-              </Link>
-              <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
-                About
-              </Link>
-              <Link to="/contact" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
-                Contact
-              </Link>
-            </nav>
+            <div className="mx-auto px-6 xl:px-8 max-w-7xl w-full">
+              <nav className="flex items-center justify-center space-x-8">
+                <Link to="/" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
+                  Home
+                </Link>
+                <Link to="/menu" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
+                  Menu
+                </Link>
+                <Link to="/about" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
+                  About
+                </Link>
+                <Link to="/contact" className="text-brand-black hover:text-brand-red font-roboto-bold transition-colors text-base">
+                  Contact
+                </Link>
+              </nav>
+            </div>
           </div>
         </div>
       </header>
