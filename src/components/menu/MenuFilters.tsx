@@ -114,7 +114,7 @@ const MenuFilters = ({
             </div>
           </div>
         </div>
-      </>
+      </div>
     </>
   );
 };
