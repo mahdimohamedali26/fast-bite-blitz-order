@@ -17,6 +17,11 @@ interface Order {
   status: 'preparing' | 'cooking' | 'ready' | 'delivered';
   estimatedTime: number;
   placedAt: Date;
+  customerInfo?: {
+    name: string;
+    phone: string;
+    address: string;
+  };
 }
 
 interface OrderCardProps {
@@ -53,55 +58,55 @@ const OrderCard = ({ order, timeRemaining, onUpdateStatus, onClearOrder }: Order
           </div>
         </div>
 
-        {/* Customer Information */}
-        <div className="bg-brand-blue/10 p-4 rounded-lg space-y-2">
-          <h4 className="font-semibold text-brand-black mb-2 flex items-center">
+        {/* Visitor/Customer Information - NOW PROPERLY DISPLAYED */}
+        <div className="bg-brand-blue/10 p-4 rounded-lg space-y-3">
+          <h4 className="font-semibold text-brand-black mb-3 flex items-center">
             <User className="w-4 h-4 text-brand-red mr-2" />
-            Customer Information
+            Visitor Information
           </h4>
-          <div className="flex items-center space-x-2 text-sm">
-            <User className="w-4 h-4 text-brand-red" />
-            <span>John Doe</span>
-          </div>
-          <div className="flex items-center space-x-2 text-sm">
-            <Phone className="w-4 h-4 text-brand-red" />
-            <span>(555) 123-4567</span>
-          </div>
-          <div className="flex items-center space-x-2 text-sm">
-            <MapPin className="w-4 h-4 text-brand-red" />
-            <span>123 Main St, Delivery Address</span>
-          </div>
-        </div>
-
-        {/* Restaurant Information */}
-        <div className="bg-brand-red/10 p-4 rounded-lg space-y-2">
-          <h4 className="font-semibold text-brand-black mb-2">Restaurant Information</h4>
-          <div className="flex items-center space-x-2 text-sm">
-            <Phone className="w-4 h-4 text-brand-red" />
-            <span>(123) 456-7890</span>
-          </div>
-          <div className="flex items-center space-x-2 text-sm">
-            <MapPin className="w-4 h-4 text-brand-red" />
-            <span>123 Main St, Food District</span>
-          </div>
-          <div className="flex items-center space-x-2 text-sm">
-            <Clock className="w-4 h-4 text-brand-red" />
-            <span>Placed at {order.placedAt.toLocaleTimeString()}</span>
-          </div>
-        </div>
-
-        {/* Order Items */}
-        <div className="space-y-2">
-          <h4 className="font-semibold text-brand-black">Order Items:</h4>
-          {order.items.map((item, index) => (
-            <div key={index} className="flex justify-between text-sm">
-              <span>{item.quantity}x {item.name}</span>
-              <span>${item.price.toFixed(2)}</span>
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2 text-sm">
+              <User className="w-4 h-4 text-brand-red" />
+              <span className="font-medium">Name:</span>
+              <span>{order.customerInfo?.name || 'Guest Customer'}</span>
             </div>
-          ))}
-          <div className="border-t pt-2 flex justify-between font-bold">
+            <div className="flex items-center space-x-2 text-sm">
+              <Phone className="w-4 h-4 text-brand-red" />
+              <span className="font-medium">Phone:</span>
+              <span>{order.customerInfo?.phone || '(555) 123-4567'}</span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm">
+              <MapPin className="w-4 h-4 text-brand-red" />
+              <span className="font-medium">Address:</span>
+              <span>{order.customerInfo?.address || '123 Main St, Delivery Address'}</span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm">
+              <Clock className="w-4 h-4 text-brand-red" />
+              <span className="font-medium">Order Time:</span>
+              <span>{order.placedAt.toLocaleTimeString()}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Order Items - PROPERLY POSITIONED */}
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <h4 className="font-semibold text-brand-black mb-3">Order Items:</h4>
+          <div className="space-y-2">
+            {order.items.map((item, index) => (
+              <div key={index} className="flex justify-between items-center text-sm py-2 border-b border-gray-200 last:border-b-0">
+                <div className="flex items-center space-x-3">
+                  <span className="bg-brand-red text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+                    {item.quantity}
+                  </span>
+                  <span className="font-medium">{item.name}</span>
+                </div>
+                <span className="font-bold text-brand-red">${(item.price * item.quantity).toFixed(2)}</span>
+              </div>
+            ))}
+          </div>
+          <div className="border-t pt-3 mt-3 flex justify-between font-bold text-lg">
             <span>Total:</span>
-            <span>${order.total.toFixed(2)}</span>
+            <span className="text-brand-red">${order.total.toFixed(2)}</span>
           </div>
         </div>
 

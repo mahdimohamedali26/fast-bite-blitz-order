@@ -12,12 +12,17 @@ interface Order {
   status: 'preparing' | 'cooking' | 'ready' | 'delivered';
   estimatedTime: number;
   placedAt: Date;
+  customerInfo?: {
+    name: string;
+    phone: string;
+    address: string;
+  };
 }
 
 interface OrderTrackingContextType {
   orders: Order[];
   activeOrders: Order[];
-  createOrder: (items: any[], total: number) => void;
+  createOrder: (items: any[], total: number, customerInfo?: any) => void;
   updateOrderStatus: (orderId: string, status: Order['status']) => void;
   clearOrder: (orderId: string) => void;
   clearAllOrders: () => void;
@@ -28,7 +33,7 @@ const OrderTrackingContext = createContext<OrderTrackingContextType | undefined>
 export const OrderTrackingProvider = ({ children }: { children: ReactNode }) => {
   const [orders, setOrders] = useState<Order[]>([]);
 
-  const createOrder = (items: any[], total: number) => {
+  const createOrder = (items: any[], total: number, customerInfo?: any) => {
     const newOrder: Order = {
       id: `ORD-${Date.now()}`,
       items: items.map(item => ({
@@ -39,7 +44,12 @@ export const OrderTrackingProvider = ({ children }: { children: ReactNode }) => 
       total,
       status: 'preparing',
       estimatedTime: 25,
-      placedAt: new Date()
+      placedAt: new Date(),
+      customerInfo: customerInfo || {
+        name: 'Guest Customer',
+        phone: '(555) 123-4567',
+        address: '123 Main St, Delivery Address'
+      }
     };
     setOrders(prev => [...prev, newOrder]);
   };
