@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ShoppingCart, Plus, Minus, X, CreditCard, Truck } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -26,6 +27,11 @@ const OrderSystem = ({ isOpen, onClose }: OrderSystemProps) => {
   const [deliveryType, setDeliveryType] = useState<"delivery" | "pickup">("delivery");
   const [paymentMethod, setPaymentMethod] = useState<"card" | "cash">("card");
   const [specialInstructions, setSpecialInstructions] = useState("");
+  const [customizations, setCustomizations] = useState({
+    cheese: false,
+    ketchup: false,
+    onion: false
+  });
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     phone: "",
@@ -36,6 +42,13 @@ const OrderSystem = ({ isOpen, onClose }: OrderSystemProps) => {
   const subtotal = getTotalPrice();
   const tax = subtotal * 0.08;
   const total = subtotal + tax + deliveryFee;
+
+  const handleCustomizationChange = (type: 'cheese' | 'ketchup' | 'onion') => {
+    setCustomizations(prev => ({
+      ...prev,
+      [type]: !prev[type]
+    }));
+  };
 
   const handlePlaceOrder = () => {
     if (cartItems.length === 0) {
@@ -145,6 +158,51 @@ const OrderSystem = ({ isOpen, onClose }: OrderSystemProps) => {
             </div>
 
             <Separator />
+
+            {/* Customization Options */}
+            <div>
+              <h3 className="font-semibold text-brand-black mb-3">Customize Your Order</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer" onClick={() => handleCustomizationChange('cheese')}>
+                  <Checkbox 
+                    checked={customizations.cheese}
+                    onChange={() => handleCustomizationChange('cheese')}
+                  />
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center text-lg">
+                      🧀
+                    </div>
+                    <span className="text-sm font-medium">Extra Cheese</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer" onClick={() => handleCustomizationChange('ketchup')}>
+                  <Checkbox 
+                    checked={customizations.ketchup}
+                    onChange={() => handleCustomizationChange('ketchup')}
+                  />
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-lg">
+                      🍅
+                    </div>
+                    <span className="text-sm font-medium">Extra Ketchup</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer" onClick={() => handleCustomizationChange('onion')}>
+                  <Checkbox 
+                    checked={customizations.onion}
+                    onChange={() => handleCustomizationChange('onion')}
+                  />
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-lg">
+                      🧅
+                    </div>
+                    <span className="text-sm font-medium">Extra Onion</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {/* Delivery Options */}
             <div>
