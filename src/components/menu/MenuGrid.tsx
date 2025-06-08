@@ -61,8 +61,8 @@ const MenuGrid = ({ items }: MenuGridProps) => {
   };
 
   return (
-    <div className="lg:col-span-3">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div className="w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
         {items.map(item => 
           <Card key={item.id} className="bg-white shadow-lg border-0 overflow-hidden hover:shadow-xl transition-shadow duration-300">
             <div className="relative">

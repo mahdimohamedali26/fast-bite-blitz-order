@@ -17,7 +17,11 @@ const Menu = () => {
   const [sortBy, setSortBy] = useState("popular");
 
   const filteredItems = menuItems.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         item.ingredients.some(ingredient => 
+                           ingredient.toLowerCase().includes(searchTerm.toLowerCase())
+                         );
     const matchesCategory = activeCategory === "all" || item.category === activeCategory;
     const matchesPrice = item.price <= priceRange[0];
     return matchesSearch && matchesCategory && matchesPrice;
@@ -42,8 +46,8 @@ const Menu = () => {
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
       
-      {/* Page Header with restored spacing */}
-      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white mt-14 md:mt-16 lg:mt-19">
+      {/* Page Header */}
+      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white mt-16">
         <div className="container mx-auto text-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-arial-black mb-4">
             Our Complete <span className="text-brand-yellow">Menu</span>
@@ -58,7 +62,7 @@ const Menu = () => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-12">
-        {/* Menu Items Section with improved responsive layout */}
+        {/* Menu Items Section */}
         <div className="mb-12 lg:mb-16">
           <MenuFilters
             searchTerm={searchTerm}
@@ -81,7 +85,7 @@ const Menu = () => {
         {/* Best Sellers Section */}
         <MenuBestSellers />
 
-        {/* Order Now CTA with improved responsive design and better touch targets */}
+        {/* Order Now CTA */}
         <div className="text-center mt-8 sm:mt-12 md:mt-16 lg:mt-20 bg-gradient-to-r from-brand-red to-brand-orange text-white py-8 sm:py-10 md:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 rounded-xl">
           <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-montserrat-bold mb-4 lg:mb-6">
             Ready to Order? 🍔
