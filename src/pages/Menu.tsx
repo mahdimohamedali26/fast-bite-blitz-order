@@ -42,9 +42,9 @@ const Menu = () => {
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
       
-      {/* Page Header with improved spacing */}
-      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white mt-4 sm:mt-6 lg:mt-8">
-        <div className="container mx-auto text-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+      {/* Page Header with restored spacing */}
+      <div className="bg-gradient-to-r from-brand-red to-brand-orange text-white mt-14 md:mt-16 lg:mt-19">
+        <div className="container mx-auto text-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-arial-black mb-4">
             Our Complete <span className="text-brand-yellow">Menu</span>
           </h1>

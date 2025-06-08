@@ -26,7 +26,6 @@ const Header = () => {
 
   return (
     <>
-      {/* FIXED: Proper header spacing with correct margins and padding */}
       <header className="bg-white shadow-lg sticky top-0 z-50 mx-2 sm:mx-4 lg:mx-6 my-2 sm:my-3 lg:my-4 rounded-lg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4">
           <div className="flex items-center justify-between">
@@ -105,7 +104,7 @@ const Header = () => {
               {/* User Account */}
               {isLoggedIn ? (
                 <div className="hidden sm:flex items-center space-x-2">
-                  <span className="text-sm text-gray-700">Hi, {user?.name}</span>
+                  <span className="text-sm text-gray-700">Hi, {user?.email || 'User'}</span>
                   <Button variant="outline" size="sm" onClick={logout}>
                     Logout
                   </Button>

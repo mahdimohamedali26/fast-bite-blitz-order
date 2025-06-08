@@ -62,7 +62,6 @@ const MenuGrid = ({ items }: MenuGridProps) => {
 
   return (
     <div className="lg:col-span-3">
-      {/* FIXED: Proper grid layout to show items side by side, not under each other */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {items.map(item => 
           <Card key={item.id} className="bg-white shadow-lg border-0 overflow-hidden hover:shadow-xl transition-shadow duration-300">
@@ -114,6 +113,22 @@ const MenuGrid = ({ items }: MenuGridProps) => {
               </div>
               
               <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
+              
+              {/* Customization Icons */}
+              <div className="flex items-center space-x-2 mb-3">
+                <span className="text-xs text-gray-500">Customize:</span>
+                <div className="flex space-x-1">
+                  <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center" title="Add Cheese">
+                    🧀
+                  </div>
+                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center" title="Add Ketchup">
+                    🍅
+                  </div>
+                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center" title="Add Onion">
+                    🧅
+                  </div>
+                </div>
+              </div>
               
               <div className="text-xs text-gray-500 mb-3">
                 {item.orders.toLocaleString()} orders this month
