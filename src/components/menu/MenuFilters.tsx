@@ -87,10 +87,10 @@ const MenuFilters = ({
         </div>
       </div>
 
+      {/* Categories and Menu Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-8">
-        {/* Categories Sidebar - Responsive */}
+        {/* Categories Sidebar */}
         <div className="lg:col-span-1">
-          {/* Mobile: Horizontal scroll, Desktop: Vertical */}
           <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 lg:sticky lg:top-24">
             <h3 className="text-lg md:text-xl font-montserrat-bold text-brand-black mb-4 md:mb-6">Categories</h3>
             <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0">
@@ -113,6 +113,10 @@ const MenuFilters = ({
               )}
             </div>
           </div>
+        </div>
+
+        {/* Menu Items Grid - This will be filled by MenuGrid component */}
+        <div className="lg:col-span-3">
         </div>
       </div>
     </>

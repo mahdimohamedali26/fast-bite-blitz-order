@@ -76,7 +76,15 @@ const Menu = () => {
             itemCount={sortedItems.length}
           />
 
-          <MenuGrid items={sortedItems} />
+          {/* Menu Grid positioned in the right column */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-8">
+            <div className="lg:col-span-1">
+              {/* Categories are handled in MenuFilters */}
+            </div>
+            <div className="lg:col-span-3">
+              <MenuGrid items={sortedItems} />
+            </div>
+          </div>
         </div>
 
         {/* Special Offers Section */}
