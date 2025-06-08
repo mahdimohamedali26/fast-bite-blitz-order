@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -104,7 +103,7 @@ const Header = () => {
               {/* User Account */}
               {isLoggedIn ? (
                 <div className="hidden sm:flex items-center space-x-2">
-                  <span className="text-sm text-gray-700">Hi, {user?.email || 'User'}</span>
+                  <span className="text-sm text-gray-700">Hi, {user?.firstName || 'User'}</span>
                   <Button variant="outline" size="sm" onClick={logout}>
                     Logout
                   </Button>
